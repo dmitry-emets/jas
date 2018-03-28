@@ -37,8 +37,8 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             putExtra(EXTRA_IS_PLAYING, isPlaying)
             putExtra(EXTRA_PLAYER, intent.action.substring(0, intent.action.lastIndexOf(".")))
             putExtra(EXTRA_TRACK_ID, IntentUtil.getLong(intent, listOf("id")))
-            putExtra(EXTRA_TRACK, intent.getStringExtra("track"))
-            putExtra(EXTRA_ARTIST, intent.getStringExtra("artist"))
+            putExtra(EXTRA_TRACK, intent.getStringExtra("track") ?: return null)
+            putExtra(EXTRA_ARTIST, intent.getStringExtra("artist") ?: return null)
             putExtra(EXTRA_ALBUM, intent.getStringExtra("album"))
             putExtra(EXTRA_DURATION, if (rawDuration < 30000) rawDuration * 1000 else rawDuration)
         }
