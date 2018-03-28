@@ -11,7 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.arellomobile.mvp.MvpFragment
+import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.mvp.presenter.AuthorizedPresenter
 import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_SCROBBLED
@@ -24,13 +24,13 @@ import kotlinx.android.synthetic.main.authorized_fragment.*
 /**
  * Created by dmitr on 06.02.2018.
  */
-class AuthorizedFragment : MvpFragment(), AuthorizedView {
+class AuthorizedFragment : MvpAppCompatFragment(), AuthorizedView {
     override fun onResume() {
         super.onResume()
         if (AppSettings.getSessionKey(activity).isEmpty()) {
-            fragmentManager.beginTransaction()
-                    .replace(android.R.id.content, UnauthorizedFragment())
-                    .commit()
+            fragmentManager?.beginTransaction()
+                    ?.replace(android.R.id.content, UnauthorizedFragment())
+                    ?.commit()
         }
     }
 
@@ -44,9 +44,9 @@ class AuthorizedFragment : MvpFragment(), AuthorizedView {
 
     override fun toggleLikeFab(like: Boolean) {
         val drawable = if (like) {
-            ContextCompat.getDrawable(activity, R.drawable.love)
+            ContextCompat.getDrawable(context!!, R.drawable.love)
         } else {
-            ContextCompat.getDrawable(activity, R.drawable.unlove)
+            ContextCompat.getDrawable(context!!, R.drawable.unlove)
         }
         fab.setImageDrawable(drawable)
     }
@@ -58,7 +58,7 @@ class AuthorizedFragment : MvpFragment(), AuthorizedView {
 
 
     override fun askLastFmCount() {
-        mAuthorizedPresenter.getScrobbles(activity)
+        mAuthorizedPresenter.getScrobbles(context!!)
     }
 
     override fun updateLastFmCountSuccess(pair: Pair<String, String>) {
@@ -83,8 +83,8 @@ class AuthorizedFragment : MvpFragment(), AuthorizedView {
         tv_now_playing.text = text
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.authorized_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.authorized_fragment, container, false)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +93,7 @@ class AuthorizedFragment : MvpFragment(), AuthorizedView {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 intent?.let {
-                    mAuthorizedPresenter.processIntent(intent, activity)
+                    mAuthorizedPresenter.processIntent(intent, context!!)
                 }
             }
         }
@@ -102,20 +102,20 @@ class AuthorizedFragment : MvpFragment(), AuthorizedView {
             addAction(ACTION_TRACK_STOP)
             addAction(ACTION_TRACK_SCROBBLED)
         }
-        LocalBroadcastManager.getInstance(activity).registerReceiver(receiver, intentFilter)
+        LocalBroadcastManager.getInstance(context!!).registerReceiver(receiver, intentFilter)
     }
 
     override fun onDestroy() {
-        LocalBroadcastManager.getInstance(activity).unregisterReceiver(receiver)
+        LocalBroadcastManager.getInstance(context!!).unregisterReceiver(receiver)
         super.onDestroy()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fab.visibility = View.GONE
-        fab.setOnClickListener { mAuthorizedPresenter.likePressed(activity) }
-        mAuthorizedPresenter.getScrobbles(activity)
-        mAuthorizedPresenter.initNowPlaying(activity)
-        mAuthorizedPresenter.countTodayScrobbled(activity)
+        fab.setOnClickListener { mAuthorizedPresenter.likePressed(context!!) }
+        mAuthorizedPresenter.getScrobbles(context!!)
+        mAuthorizedPresenter.initNowPlaying(context!!)
+        mAuthorizedPresenter.countTodayScrobbled(context!!)
     }
 }

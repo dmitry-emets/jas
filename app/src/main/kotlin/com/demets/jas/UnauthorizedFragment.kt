@@ -1,10 +1,10 @@
 package com.demets.jas
 
-import android.app.Fragment
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,11 +24,11 @@ class UnauthorizedFragment : Fragment() {
     var accessRequested = false
     lateinit var lfApiService: LfApiService
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.unauthorized_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.unauthorized_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lfApiService = LfApiService.create()
 
@@ -67,10 +67,10 @@ class UnauthorizedFragment : Fragment() {
                             val successMessage = String.format(getString(R.string.message_login_success), it.name)
                             showToast(activity, successMessage)
                             if (AppSettings.getSessionKey(activity).isNotEmpty()) {
-                                activity.fragmentManager
-                                        .beginTransaction()
-                                        .replace(android.R.id.content, AuthorizedFragment())
-                                        .commit()
+                                fragmentManager
+                                        ?.beginTransaction()
+                                        ?.replace(android.R.id.content, AuthorizedFragment())
+                                        ?.commit()
                             }
                         }, {
                             showToast(activity, getString(R.string.error_connection_message))
@@ -83,7 +83,7 @@ class UnauthorizedFragment : Fragment() {
         }
     }
 
-    private fun showToast(context: Context, text: String) =
+    private fun showToast(context: Context?, text: String) =
             Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
 
     override fun onDestroy() {

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             AuthorizedFragment()
         }
-        fragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(android.R.id.content, fragment)
                 .commit()
     }
