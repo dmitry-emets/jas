@@ -1,0 +1,121 @@
+package com.demets.jas
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import com.arellomobile.mvp.MvpFragment
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.demets.jas.mvp.presenter.AuthorizedPresenter
+import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_SCROBBLED
+import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_START
+import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_STOP
+import com.demets.jas.mvp.view.AuthorizedView
+import kotlinx.android.synthetic.main.authorized_fragment.*
+
+
+/**
+ * Created by dmitr on 06.02.2018.
+ */
+class AuthorizedFragment : MvpFragment(), AuthorizedView {
+    override fun onResume() {
+        super.onResume()
+        if (AppSettings.getSessionKey(activity).isEmpty()) {
+            fragmentManager.beginTransaction()
+                    .replace(android.R.id.content, UnauthorizedFragment())
+                    .commit()
+        }
+    }
+
+    override fun showLikeFab() {
+        fab.visibility = View.VISIBLE
+    }
+
+    override fun hideLikeFab() {
+        fab.visibility = View.GONE
+    }
+
+    override fun toggleLikeFab(like: Boolean) {
+        val drawable = if (like) {
+            ContextCompat.getDrawable(activity, R.drawable.love)
+        } else {
+            ContextCompat.getDrawable(activity, R.drawable.unlove)
+        }
+        fab.setImageDrawable(drawable)
+    }
+
+    private lateinit var receiver: BroadcastReceiver
+
+    @InjectPresenter
+    lateinit var mAuthorizedPresenter: AuthorizedPresenter
+
+
+    override fun askLastFmCount() {
+        mAuthorizedPresenter.getScrobbles(activity)
+    }
+
+    override fun updateLastFmCountSuccess(pair: Pair<String, String>) {
+        tv_total_played_count.text = pair.first
+        tv_total_played_label.text = getString(R.string.ma_total_played_label)
+        tv_total_played_updated.text = pair.second
+    }
+
+    override fun updateLastFmCountFailed(pair: Pair<String, String>) {
+        tv_total_played_count.text = pair.first
+        tv_total_played_label.text = getString(R.string.ma_total_played_label)
+        tv_total_played_updated.text = pair.second
+        Toast.makeText(activity, getString(R.string.ma_lastfm_update_failed_message), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun updateTodayScrobbled(pair: Pair<String, String>) {
+        tv_scrobbled_today_count.text = pair.first
+        tv_scrobbled_today_updated.text = pair.second
+    }
+
+    override fun updateNowPlaying(text: String) {
+        tv_now_playing.text = text
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater?.inflate(R.layout.authorized_fragment, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.let {
+                    mAuthorizedPresenter.processIntent(intent, activity)
+                }
+            }
+        }
+        val intentFilter = IntentFilter().apply {
+            addAction(ACTION_TRACK_START)
+            addAction(ACTION_TRACK_STOP)
+            addAction(ACTION_TRACK_SCROBBLED)
+        }
+        LocalBroadcastManager.getInstance(activity).registerReceiver(receiver, intentFilter)
+    }
+
+    override fun onDestroy() {
+        LocalBroadcastManager.getInstance(activity).unregisterReceiver(receiver)
+        super.onDestroy()
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        fab.visibility = View.GONE
+        fab.setOnClickListener { mAuthorizedPresenter.likePressed(activity) }
+        mAuthorizedPresenter.getScrobbles(activity)
+        mAuthorizedPresenter.initNowPlaying(activity)
+        mAuthorizedPresenter.countTodayScrobbled(activity)
+    }
+}

@@ -1,0 +1,195 @@
+package com.demets.jas.mvp.presenter
+
+import android.content.Context
+import android.content.Intent
+import android.text.format.DateUtils
+import android.widget.Toast
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
+import com.demets.jas.AppSettings
+import com.demets.jas.R
+import com.demets.jas.api.LfApiService
+import com.demets.jas.db.TrackDbHelper
+import com.demets.jas.db.contract.TrackContract
+import com.demets.jas.mvp.view.AuthorizedView
+import com.demets.jas.utils.TaggedLogger
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.text.DateFormat
+import java.util.*
+
+@InjectViewState
+class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
+    private val lfApiService = LfApiService.create()
+    private var canLove = true
+    private var cachedLoved = false
+
+    fun getScrobbles(context: Context) {
+        val lastCount = AppSettings.getLastFmCount(context)
+        val lastUpdateTime = AppSettings.getLastFmCountTime(context)
+
+        val neverUpdated = lastUpdateTime == -1L
+        val tooOldData = System.currentTimeMillis() - lastUpdateTime > 1000 * 60 * 10
+
+        if (!neverUpdated) {
+            viewState.updateLastFmCountSuccess(Pair(lastCount.toString(), formatTime(lastUpdateTime)))
+        }
+        if (neverUpdated || tooOldData) {
+            fetchScrobbleCount(context)
+        }
+    }
+
+    fun processIntent(intent: Intent, context: Context) {
+        when (intent.action) {
+            ACTION_TRACK_START -> {
+                val title = intent.getStringExtra(TRACK_TITLE)
+                val artist = intent.getStringExtra(TRACK_ARTIST)
+                viewState.updateNowPlaying("$artist - $title")
+                canLove = true
+                viewState.showLikeFab()
+                viewState.toggleLikeFab(canLove)
+                setLoveFabInServerState(title, artist, context)
+            }
+            ACTION_TRACK_STOP -> {
+                viewState.updateNowPlaying("nothing")
+                viewState.hideLikeFab()
+                cachedLoved = false
+            }
+            ACTION_TRACK_SCROBBLED -> {
+                countTodayScrobbled(context)
+            }
+        }
+    }
+
+    fun countTodayScrobbled(context: Context) {
+        val trackDbHelper = TrackDbHelper(context)
+        val cursor = trackDbHelper.writableDatabase
+                .query(
+                        TrackContract.TrackEntry.TABLE_NAME,
+                        null,
+                        "${TrackContract.TrackEntry.COLUMN_TIME}>=date('now', 'localtime', 'start of day')",
+                        null,
+                        null,
+                        null,
+                        null
+                )
+        val pair = Pair(cursor.count.toString(), formatTime(System.currentTimeMillis()))
+        cursor.close()
+        trackDbHelper.close()
+        viewState.updateTodayScrobbled(pair)
+    }
+
+    fun initNowPlaying(context: Context) {
+        val isNowPlaying = AppSettings.getPreviousTrackInfo(context)?.isPlayingState
+        if (isNowPlaying != null && isNowPlaying) {
+            val prevTrack = AppSettings.getPreviousTrackInfo(context)?.track
+            val track = prevTrack?.title
+            val artist = prevTrack?.artist
+            if (track != null && artist != null) {
+                viewState.updateNowPlaying("$artist - $track")
+                viewState.showLikeFab()
+                setLoveFabInServerState(track, artist, context)
+            }
+        }
+    }
+
+    private fun setLoveFabInServerState(track: String, artist: String, context: Context) {
+        TaggedLogger.d("$canLove, $cachedLoved")
+        if (!cachedLoved) {
+            lfApiService.getTrackInfo(track = track, artist = artist, user = AppSettings.getUsername(context))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .map { it.result.userloved }
+                    .subscribe({
+                        cachedLoved = true
+                        canLove = it != 1
+                        TaggedLogger.d("Can love: $canLove")
+                        viewState.toggleLikeFab(canLove)
+                    }, {
+                        canLove = true
+                        viewState.toggleLikeFab(canLove)
+                    })
+        } else {
+            viewState.toggleLikeFab(canLove)
+        }
+    }
+
+    fun likePressed(context: Context) {
+        val track = AppSettings.getPreviousTrackInfo(context)?.track?.title
+        val artist = AppSettings.getPreviousTrackInfo(context)?.track?.artist
+        val sk = AppSettings.getSessionKey(context)
+        if (track != null && artist != null) {
+            if (canLove) {
+                lfApiService.trackLove(track, artist, sk)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Toast.makeText(context, context.getString(R.string.ma_track_loved_message), Toast.LENGTH_SHORT).show()
+                            canLove = false
+                            viewState.toggleLikeFab(canLove)
+                        }, {
+                            Toast.makeText(context, context.getString(R.string.ma_track_love_failed_message), Toast.LENGTH_SHORT).show()
+                        })
+            } else {
+                lfApiService.trackUnlove(track, artist, sk)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            Toast.makeText(context, context.getString(R.string.ma_track_unloved_message), Toast.LENGTH_SHORT).show()
+                            canLove = true
+                            viewState.toggleLikeFab(canLove)
+                        }, {
+                            Toast.makeText(context, context.getString(R.string.ma_track_unlove_failed_message), Toast.LENGTH_SHORT).show()
+                        })
+            }
+        }
+
+        canLove = !canLove
+        viewState.toggleLikeFab(canLove)
+    }
+
+    private fun fetchScrobbleCount(context: Context) {
+        val user = AppSettings.getUsername(context)
+        lfApiService.getUserInfo(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.result.playcount }
+                .subscribe({
+                    val time = System.currentTimeMillis()
+                    AppSettings.setLastFmCount(context, it)
+                    AppSettings.setLastFmCountTime(context, time)
+                    viewState.updateLastFmCountSuccess(Pair(it.toString(), formatTime(time)))
+                }, {
+                    val count = AppSettings.getLastFmCount(context)
+                    val time = AppSettings.getLastFmCountTime(context)
+                    viewState.updateLastFmCountFailed(Pair(count.toString(), formatTime(time)))
+                })
+    }
+
+    private fun formatTime(time: Long): String {
+        //TODO: use resources for strings
+        if (time == -1L) {
+            return "never updated"
+        }
+        if (System.currentTimeMillis() - time < 1000 * 60 * 3) {
+            return "updated just now"
+        }
+        val dfDate = DateFormat.getDateInstance(DateFormat.MEDIUM)
+        val dfTime = DateFormat.getTimeInstance(DateFormat.SHORT)
+        val date = Date(time)
+        return if (DateUtils.isToday(time)) {
+            String.format("updated today at %s", dfTime.format(date))
+        } else {
+            String.format("updated %s at %s", dfDate.format(date), dfTime.format(date))
+        }
+    }
+
+    companion object {
+        const val ACTION_TRACK_SCROBBLED = "ACTION_TRACK_SCROBBLED"
+        const val ACTION_TRACK_START = "ACTION_TRACK_START"
+        const val ACTION_TRACK_STOP = "ACTION_TRACK_STOP"
+        const val TRACK_TITLE = "title"
+        const val TRACK_ARTIST = "artist"
+        const val TRACK_ALBUM = "album"
+    }
+}

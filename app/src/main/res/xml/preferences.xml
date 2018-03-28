@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory android:title="Scrobbling">
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/pref_key_scrobbling_enabled"
+            android:title="@string/pref_title_scrobbling_enabled"
+            android:textSize="15sp" />
+        <com.demets.jas.preference.SeekBarDialogPreference
+            style="@style/DialogPreference"
+            android:key="@string/pref_key_min_time_to_scrobble"
+            android:title="@string/pref_title_min_time_to_scrobble"
+            android:defaultValue="30"
+            textFormTemplate="%s seconds"
+            min="1"
+            max="60" />
+        <com.demets.jas.preference.SeekBarDialogPreference
+            style="@style/DialogPreference"
+            android:key="@string/pref_key_min_percent_to_scrobble"
+            android:title="@string/pref_title_min_percent_to_scrobble"
+            android:defaultValue="50"
+            textFormTemplate="%s percents"
+            min="1"
+            max="100" />
+        <com.demets.jas.preference.SeekBarDialogPreference
+            style="@style/DialogPreference"
+            android:key="@string/pref_key_min_track_duration_to_scrobble"
+            android:title="@string/pref_title_min_track_duration_to_scrobble"
+            android:defaultValue="30"
+            textFormTemplate="%s seconds"
+            min="1"
+            max="60" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="Notifications">
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/pref_key_notifications_enabled"
+            android:title="@string/pref_title_notifications_enabled" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/pref_key_min_priority_notifications_enabled"
+            android:title="@string/pref_title_min_priority_notifications_enabled" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="@string/pref_key_enable_toast_on_scrobble"
+            android:title="@string/pref_title_enable_toast_on_scrobble" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="Account">
+        <android.support.v7.preference.Preference
+            android:enabled="false"
+            android:key="@string/pref_key_logout"
+            android:title="@string/pref_title_logout" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="Credits">
+        <android.support.v7.preference.Preference
+            android:enabled="true"
+            android:key="@string/pref_key_author"
+            android:title="@string/pref_title_author"
+            android:summary="@string/pref_summary_author" />
+        <android.support.v7.preference.Preference
+            android:enabled="true"
+            android:key="@string/pref_key_logo_author"
+            android:title="@string/pref_title_logo_author"
+            android:summary="@string/pref_summary_logo_author" />
+        <android.support.v7.preference.Preference
+            android:enabled="true"
+            android:key="@string/pref_key_icons_author"
+            android:title="@string/pref_title_icons_author"
+            android:summary="@string/pref_summary_icons_author" />
+        <android.support.v7.preference.Preference
+            android:enabled="true"
+            android:key="@string/pref_key_version"
+            android:title="@string/pref_title_version"
+            android:summary="@string/pref_summary_version" />
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>
