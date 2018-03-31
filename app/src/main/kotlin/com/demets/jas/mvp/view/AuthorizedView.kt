@@ -16,4 +16,6 @@ interface AuthorizedView : MvpView {
     fun toggleLikeFab(like: Boolean)
     fun showLikeFab()
     fun hideLikeFab()
+    fun showRefresher()
+    fun hideRefresher()
 }

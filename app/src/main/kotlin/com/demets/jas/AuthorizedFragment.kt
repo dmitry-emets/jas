@@ -83,6 +83,14 @@ class AuthorizedFragment : MvpAppCompatFragment(), AuthorizedView {
         tv_now_playing.text = text
     }
 
+    override fun showRefresher() {
+        refreshLayout.isRefreshing = true
+    }
+
+    override fun hideRefresher() {
+        refreshLayout.isRefreshing = false
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.authorized_fragment, container, false)
     }
@@ -114,7 +122,7 @@ class AuthorizedFragment : MvpAppCompatFragment(), AuthorizedView {
         super.onViewCreated(view, savedInstanceState)
         fab.visibility = View.GONE
         fab.setOnClickListener { mAuthorizedPresenter.likePressed(context!!) }
-        layout_total_played.setOnClickListener { mAuthorizedPresenter.fetchScrobbleCount(context!!) }
+        refreshLayout.setOnRefreshListener { mAuthorizedPresenter.fetchScrobbleCount(context!!) }
         mAuthorizedPresenter.getScrobbles(context!!)
         mAuthorizedPresenter.initNowPlaying(context!!)
         mAuthorizedPresenter.countTodayScrobbled(context!!)

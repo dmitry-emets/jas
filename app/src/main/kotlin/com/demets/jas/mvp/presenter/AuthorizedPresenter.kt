@@ -150,6 +150,7 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
 
     fun fetchScrobbleCount(context: Context) {
         val user = AppSettings.getUsername(context)
+        viewState.showRefresher()
         lfApiService.getUserInfo(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -158,10 +159,12 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
                     val time = System.currentTimeMillis()
                     AppSettings.setLastFmCount(context, it)
                     AppSettings.setLastFmCountTime(context, time)
+                    viewState.hideRefresher()
                     viewState.updateLastFmCountSuccess(Pair(it.toString(), formatTime(time)))
                 }, {
                     val count = AppSettings.getLastFmCount(context)
                     val time = AppSettings.getLastFmCountTime(context)
+                    viewState.hideRefresher()
                     viewState.updateLastFmCountFailed(Pair(count.toString(), formatTime(time)))
                 })
     }
