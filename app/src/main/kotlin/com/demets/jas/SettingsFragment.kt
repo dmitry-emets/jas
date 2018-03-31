@@ -76,9 +76,16 @@ class SettingsFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceManager.sharedPreferencesName = AppSettings.PREFS_NAME
         addPreferencesFromResource(R.xml.preferences)
+        updateOldValues()
         setSummaries()
         setOnPrefChangeListener()
         setOnPrefClickListener()
+    }
+
+    private fun updateOldValues() {
+        if (AppSettings.getMinPercentToScrobble(context) < 50) {
+            AppSettings.setMinPercentToScrobble(context, 50)
+        }
     }
 
     private fun setSummaries() {

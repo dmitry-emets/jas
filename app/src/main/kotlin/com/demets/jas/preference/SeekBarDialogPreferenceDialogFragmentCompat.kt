@@ -30,7 +30,12 @@ class SeekBarDialogPreferenceDialogFragmentCompat : PreferenceDialogFragmentComp
             mTemplate = (preference as SeekBarDialogPreference).textViewTemplate
 
             if (mMax < mMin) throw IllegalStateException("SeekBarDialog: max value should be greater than min value!")
-            if (mValue < mMin || mValue > mMax) throw IllegalStateException("SeekBarDialog: value should be between min and max value!")
+            if (mValue < mMin) {
+                mValue = mMin
+            }
+            if (mValue > mMax) {
+                mValue = mMax
+            }
             mSeekBar.max = mMax - mMin
             mSeekBar.progress = mValue - mMin
             mTextView.text = String.format(mTemplate, mValue)

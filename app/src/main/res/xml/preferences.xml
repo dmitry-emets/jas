@@ -21,7 +21,7 @@
             android:title="@string/pref_title_min_percent_to_scrobble"
             android:defaultValue="50"
             textFormTemplate="%s percents"
-            min="1"
+            min="50"
             max="100" />
         <com.demets.jas.preference.SeekBarDialogPreference
             style="@style/DialogPreference"
