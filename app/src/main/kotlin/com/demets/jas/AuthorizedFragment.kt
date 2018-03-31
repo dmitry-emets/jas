@@ -114,6 +114,7 @@ class AuthorizedFragment : MvpAppCompatFragment(), AuthorizedView {
         super.onViewCreated(view, savedInstanceState)
         fab.visibility = View.GONE
         fab.setOnClickListener { mAuthorizedPresenter.likePressed(context!!) }
+        layout_total_played.setOnClickListener { mAuthorizedPresenter.fetchScrobbleCount(context!!) }
         mAuthorizedPresenter.getScrobbles(context!!)
         mAuthorizedPresenter.initNowPlaying(context!!)
         mAuthorizedPresenter.countTodayScrobbled(context!!)

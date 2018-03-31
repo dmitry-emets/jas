@@ -148,7 +148,7 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
         viewState.toggleLikeFab(canLove)
     }
 
-    private fun fetchScrobbleCount(context: Context) {
+    fun fetchScrobbleCount(context: Context) {
         val user = AppSettings.getUsername(context)
         lfApiService.getUserInfo(user)
                 .subscribeOn(Schedulers.io())
