@@ -17,7 +17,8 @@ Supported players:
 * Android Music Player
 * more players coming soon!
 
-Screenshots:
+Screenshots:<br>
+
 <img src="screenshots/main.png" alt="Main screen" height="450px"/>&nbsp;
 <img src="screenshots/tracks.png" alt="Main screen" height="450px"/>&nbsp;
 <img src="screenshots/settings.png" alt="Main screen" height="450px"/>
