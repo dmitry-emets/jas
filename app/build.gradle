@@ -11,8 +11,8 @@ android {
         applicationId 'com.demets.jas'
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 7
-        versionName "Beta 0.3.20180330"
+        versionCode 8
+        versionName "Beta 0.3.20180407"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }

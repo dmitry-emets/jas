@@ -54,7 +54,7 @@
 
     <string name="pref_key_version" translatable="false">"pref_version"</string>
     <string name="pref_title_version" translatable="true">"Version"</string>
-    <string name="pref_summary_version" translatable="false">"Beta 0.3.20180330"</string>
+    <string name="pref_summary_version" translatable="false">"Beta 0.3.20180407"</string>
 
     <string name="message_login_success" translatable="true">You logged in as %s</string>
     <string name="menu_settings_label" translatable="true">Settings</string>
