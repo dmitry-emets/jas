@@ -11,8 +11,8 @@ android {
         applicationId 'com.demets.jas'
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 8
-        versionName "Beta 0.3.20180407"
+        versionCode 9
+        versionName "Beta 0.3.20180505"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -29,7 +29,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:preference-v7:27.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
