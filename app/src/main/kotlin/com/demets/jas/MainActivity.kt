@@ -1,5 +1,6 @@
 package com.demets.jas
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -11,8 +12,8 @@ import android.view.MenuItem
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PreferenceManager
-                .setDefaultValues(this, R.xml.preferences, false)
+        PreferenceManager.setDefaultValues(this, AppSettings.PREFS_NAME, Context.MODE_PRIVATE,
+                R.xml.preferences, false)
         val fragment = if (AppSettings.getSessionKey(this).isEmpty()) {
             UnauthorizedFragment()
         } else {
