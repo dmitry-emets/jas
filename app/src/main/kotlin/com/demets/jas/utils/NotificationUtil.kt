@@ -13,9 +13,8 @@ import com.demets.jas.MainActivity
 import com.demets.jas.R
 import com.demets.jas.model.Track
 
-
 /**
- * Created by dmitr on 21.02.2018.
+ * Util class for status bar notifications.
  */
 object NotificationUtil {
     private const val CHANNEL_ID = "JAS channel ID"
@@ -24,8 +23,8 @@ object NotificationUtil {
 
     private fun getNotificationManager(context: Context): NotificationManager? {
         if (notificationManager == null) {
-            notificationManager = context.applicationContext
-                    .getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager = context.applicationContext.getSystemService(NOTIFICATION_SERVICE)
+                    as NotificationManager
         }
         return notificationManager
     }
@@ -53,31 +52,45 @@ object NotificationUtil {
     }
 
     fun setNowPlaying(context: Context, track: Track) {
-        if (AppSettings.getNotificationsEnabled(context)) {
+        val isAuthorized = AppSettings.isAuthorized(context)
+        val scrobblingEnabled = AppSettings.getScrobblingEnabled(context)
+        val notificationsEnabled = AppSettings.getNotificationsEnabled(context)
+        TaggedLogger.d("NP Update: Authorized = $isAuthorized")
+        TaggedLogger.d("NP Update: Scrobbling enabled = $scrobblingEnabled")
+        TaggedLogger.d("NP Update: Notifications enabled = $notificationsEnabled")
+
+        if (isAuthorized && scrobblingEnabled && notificationsEnabled) {
+            TaggedLogger.d("NP Update: notification will be updated")
             initNotificationChannel(context)
             val priority = if (AppSettings.getMinPriorityNotificationsEnabled(context)) PRIORITY_LOW else PRIORITY_DEFAULT
-            val mBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
+
+            val resultPendingIntent = TaskStackBuilder.create(context)
+                    .addParentStack(MainActivity::class.java)
+                    .addNextIntent(Intent(context, MainActivity::class.java))
+                    .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                     .setPriority(priority)
                     .setSmallIcon(R.drawable.headphones)
                     .setContentTitle("${track.artist} - ${track.title}")
                     .setContentText("Now scrobbling")
-            val resultIntent = Intent(context, MainActivity::class.java)
-            val stackBuilder = TaskStackBuilder.create(context)
-            stackBuilder.addParentStack(MainActivity::class.java)
-            stackBuilder.addNextIntent(resultIntent)
-            val resultPendingIntent = stackBuilder.getPendingIntent(
-                    0,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            mBuilder.setContentIntent(resultPendingIntent)
-            val notification = mBuilder.build()
+                    .setContentIntent(resultPendingIntent)
+                    .build()
             notification.flags = Notification.FLAG_ONGOING_EVENT
             getNotificationManager(context)?.notify(NOW_PLAYING, notification)
+            TaggedLogger.d("NP Update: notification updated")
+        }
+    }
+
+    fun restoreNowPlaying(context: Context) {
+        val prevTrackInfo = AppSettings.getPreviousTrackInfo(context)
+        if (prevTrackInfo?.isPlayingState == true) {
+            setNowPlaying(context, prevTrackInfo.track)
         }
     }
 
     fun dismissNowPlaying(context: Context) {
-//        initNotificationChannel(context)
         getNotificationManager(context)?.cancel(NOW_PLAYING)
+        TaggedLogger.d("NP notification dismissed")
     }
 }

@@ -23,7 +23,7 @@ import io.reactivex.schedulers.Schedulers
  */
 class JASService : Service() {
 
-    lateinit var trackDbHelper: TrackDbHelper
+    private lateinit var trackDbHelper: TrackDbHelper
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -31,125 +31,157 @@ class JASService : Service() {
             TaggedLogger.d("Empty or null intent. Intent ignored.")
             START_STICKY
         } else {
-            TaggedLogger.d("Processing intent: " +
-                    intent.getStringExtra(MyBroadcastReceiver.EXTRA_ARTIST) + " - " +
-                    intent.getStringExtra(MyBroadcastReceiver.EXTRA_TRACK) + " (" +
-                    intent.getBooleanExtra(MyBroadcastReceiver.EXTRA_IS_PLAYING, false) + ")")
+            logIntent(intent)
 
-            val isPlaying = intent.getBooleanExtra(MyBroadcastReceiver.EXTRA_IS_PLAYING, false)
-            val track = Track(intent.getStringExtra(MyBroadcastReceiver.EXTRA_TRACK),
+            val trackPlaying = intent.getBooleanExtra(MyBroadcastReceiver.EXTRA_IS_PLAYING, false)
+            val trackFromIntent = Track(intent.getStringExtra(MyBroadcastReceiver.EXTRA_TRACK),
                     intent.getStringExtra(MyBroadcastReceiver.EXTRA_ARTIST),
                     intent.getStringExtra(MyBroadcastReceiver.EXTRA_ALBUM),
                     intent.getLongExtra(MyBroadcastReceiver.EXTRA_DURATION, -1L),
                     intent.getLongExtra(MyBroadcastReceiver.EXTRA_TIMESTAMP, -1L))
 
             //Send intent for UI update
-            val trackIntent = if (isPlaying) {
+            val intentForUi = if (trackPlaying) {
                 Intent(AuthorizedPresenter.ACTION_TRACK_START)
                         .apply {
-                            putExtra(AuthorizedPresenter.TRACK_TITLE, track.title)
-                            putExtra(AuthorizedPresenter.TRACK_ARTIST, track.artist)
-                            putExtra(AuthorizedPresenter.TRACK_ALBUM, track.album)
+                            putExtra(AuthorizedPresenter.TRACK_TITLE, trackFromIntent.title)
+                            putExtra(AuthorizedPresenter.TRACK_ARTIST, trackFromIntent.artist)
+                            putExtra(AuthorizedPresenter.TRACK_ALBUM, trackFromIntent.album)
                         }
             } else {
                 Intent(AuthorizedPresenter.ACTION_TRACK_STOP)
             }
-            LocalBroadcastManager.getInstance(this).sendBroadcast(trackIntent)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(intentForUi)
+
+            //Update last.fm now playing if track is playing.
+            if (trackPlaying) {
+                sendNowPlaying(trackFromIntent)
+            }
 
             val previousTrackInfo = AppSettings.getPreviousTrackInfo(this)
-            //Track is playing.
-            if (isPlaying
-                    && track.artist.isNotEmpty()
-                    && track.title.isNotEmpty()) {
-                NotificationUtil.setNowPlaying(this, track)
-                LfApiService.create()
-                        .trackUpdateNowPlaying(trackAsNowPlayingMap(track),
-                                AppSettings.getSessionKey(this))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            TaggedLogger.d("Now playing updated: ${track.artist} - ${track.title}")
-                        }, {
-                            TaggedLogger.d("Error while updating now playing: ${track.artist} - ${track.title}")
-                        })
-            }
-            val statusWasPlaying = previousTrackInfo?.isPlayingState ?: false
+            val prevTrackPlaying = previousTrackInfo?.isPlayingState ?: false
+            val prevTrack = previousTrackInfo?.track
+
             //Previous track state was "playing" and now it changed to another state.
-            val isStateChangedFromPlaying = statusWasPlaying && !isPlaying
-            val isTrackChanged = (previousTrackInfo?.track?.artist != track.artist ||
-                    previousTrackInfo.track.title != track.title) && statusWasPlaying
-            if (previousTrackInfo != null && (isStateChangedFromPlaying || isTrackChanged)) {
-                NotificationUtil.dismissNowPlaying(this)
-                val prevTrack = previousTrackInfo.track
-                val minDuration = AppSettings.getMinDurationToScrobble(this)
-                val minTimeToScrobble = AppSettings.getMinTimeToScrobble(this)
-                val minPercentToScrobble = AppSettings.getMinPercentToScrobble(this)
+            val playingStopped = prevTrackPlaying && !trackPlaying
+            val isTrackChanged = (prevTrack?.artist != trackFromIntent.artist ||
+                    prevTrack.title != trackFromIntent.title) && prevTrackPlaying
 
-                val playedTimeInSecs = (System.currentTimeMillis() - prevTrack.timestamp) / 1000
-                val playedPercent = playedTimeInSecs * 1000 * 100 / prevTrack.duration
-
-                TaggedLogger.d("Track duration: ${prevTrack.duration}")
-                TaggedLogger.d("Min duration: ${minDuration * 1000}")
-                TaggedLogger.d("Played time: $playedTimeInSecs")
-                TaggedLogger.d("Min time: $minTimeToScrobble")
-                TaggedLogger.d("Played percent: $playedPercent")
-                TaggedLogger.d("Min percent: $minPercentToScrobble")
-
-                if (AppSettings.isAuthorized(this)
-                        && AppSettings.getScrobblingEnabled(this)
-                        && prevTrack.duration > minDuration * 1000
-                        && playedTimeInSecs > minTimeToScrobble
-                        && playedPercent > minPercentToScrobble) {
-                    if (prevTrack.artist.isNotEmpty() && prevTrack.title.isNotEmpty()) {
-                        trackDbHelper = TrackDbHelper(this)
-                        val trackId = trackDbHelper
-                                .writableDatabase
-                                .insert(
-                                        TrackContract.TrackEntry.TABLE_NAME,
-                                        null,
-                                        TrackDbHelper.trackAsCV(prevTrack)
-                                )
-                        trackDbHelper.close()
-                        LfApiService.create()
-                                .trackScrobble(tracksAsScrobbleMap(listOf(prevTrack)),
-                                        AppSettings.getSessionKey(this))
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({
-                                    TaggedLogger.d("Track scrobbled: ${prevTrack.artist} - ${prevTrack.title}")
-                                    trackDbHelper.writableDatabase
-                                            .update(
-                                                    TrackContract.TrackEntry.TABLE_NAME,
-                                                    TrackDbHelper.trackAsCV(prevTrack, true),
-                                                    "_id = ?",
-                                                    arrayOf(trackId.toString())
-                                            )
-                                    trackDbHelper.close()
-                                    val trackScrobbledIntent = Intent(AuthorizedPresenter.ACTION_TRACK_SCROBBLED)
-                                    LocalBroadcastManager.getInstance(this).sendBroadcast(trackScrobbledIntent)
-                                }, {
-                                    TaggedLogger.d("Scrobbling failed: ${prevTrack.artist} - ${prevTrack.title}")
-                                })
-                        if (AppSettings.getEnableToastOnScrobble(this)) {
-                            Toast.makeText(this, "Scrobbled: ${prevTrack.artist} - ${prevTrack.title}", Toast.LENGTH_LONG).show()
-                        }
-                    } else {
-                        TaggedLogger.d("Empty artist or track. Track ignored.")
-                    }
-                }
+            if (previousTrackInfo != null && (playingStopped || isTrackChanged)) {
+                analyzeForScrobble(previousTrackInfo.track)
             }
-            AppSettings.setPreviousTrackInfo(this, PreviousTrackInfo(track, isPlaying))
+            AppSettings.setPreviousTrackInfo(this, PreviousTrackInfo(trackFromIntent, trackPlaying))
 
             START_STICKY
         }
+    }
 
+    private fun analyzeForScrobble(prevTrack: Track) {
+        NotificationUtil.dismissNowPlaying(this)
+
+        val minDuration = AppSettings.getMinDurationToScrobble(this)
+        val minTime = AppSettings.getMinTimeToScrobble(this)
+        val minPercent = AppSettings.getMinPercentToScrobble(this)
+
+        val playedTimeInSecs = (System.currentTimeMillis() - prevTrack.timestamp) / 1000
+        val playedPercent = playedTimeInSecs * 1000 * 100 / prevTrack.duration
+
+        TaggedLogger.d("Track duration: ${prevTrack.duration}")
+        TaggedLogger.d("Min duration: ${minDuration * 1000}")
+        TaggedLogger.d("Played time: $playedTimeInSecs")
+        TaggedLogger.d("Min time: $minTime")
+        TaggedLogger.d("Played percent: $playedPercent")
+        TaggedLogger.d("Min percent: $minPercent")
+
+        val canBeScrobbled = AppSettings.isAuthorized(this)
+                && AppSettings.getScrobblingEnabled(this)
+                && prevTrack.duration > minDuration * 1000
+                && playedTimeInSecs > minTime
+                && playedPercent > minPercent
+
+        if (canBeScrobbled) {
+            if (prevTrack.artist.isNotEmpty() && prevTrack.title.isNotEmpty()) {
+                val trackDbId = saveTrackToDb(prevTrack)
+                sendScrobbleToLfm(prevTrack, trackDbId)
+                triggerToast(prevTrack)
+            } else {
+                TaggedLogger.d("Empty artist or track. Track ignored.")
+            }
+        }
+    }
+
+    private fun triggerToast(prevTrack: Track) {
+        if (AppSettings.getEnableToastOnScrobble(this)) {
+            Toast.makeText(this, "Scrobbled: ${prevTrack.artist} - ${prevTrack.title}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun sendScrobbleToLfm(track: Track, dbId: Long) {
+        LfApiService.create()
+                .trackScrobble(tracksAsScrobbleMap(listOf(track)),
+                        AppSettings.getSessionKey(this))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    TaggedLogger.d("Track scrobbled: ${track.artist} - ${track.title}")
+                    updateDbOnScrobble(track, dbId)
+                    val trackScrobbledIntent = Intent(AuthorizedPresenter.ACTION_TRACK_SCROBBLED)
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(trackScrobbledIntent)
+                }, {
+                    TaggedLogger.d("Scrobbling failed: ${track.artist} - ${track.title}")
+                })
+    }
+
+    private fun updateDbOnScrobble(track: Track, dbId: Long) {
+        trackDbHelper.writableDatabase
+                .update(
+                        TrackContract.TrackEntry.TABLE_NAME,
+                        TrackDbHelper.trackAsCV(track, true),
+                        "_id = ?",
+                        arrayOf(dbId.toString())
+                )
+        trackDbHelper.close()
+    }
+
+    private fun saveTrackToDb(track: Track): Long {
+        trackDbHelper = TrackDbHelper(this)
+        val id = trackDbHelper
+                .writableDatabase
+                .insert(
+                        TrackContract.TrackEntry.TABLE_NAME,
+                        null,
+                        TrackDbHelper.trackAsCV(track)
+                )
+        trackDbHelper.close()
+        return id
+    }
+
+    private fun sendNowPlaying(track: Track) {
+        val isAuthorized = AppSettings.isAuthorized(this)
+        if (isAuthorized && track.artist.isNotEmpty() && track.title.isNotEmpty()) {
+            NotificationUtil.setNowPlaying(this, track)
+            LfApiService.create()
+                    .trackUpdateNowPlaying(trackAsNowPlayingMap(track),
+                            AppSettings.getSessionKey(this))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        TaggedLogger.d("Last.fm now playing updated: ${track.artist} - ${track.title}")
+                    }, {
+                        TaggedLogger.d("Error while updating now playing: ${track.artist} - ${track.title}")
+                    })
+        }
+    }
+
+    private fun logIntent(intent: Intent) {
+        TaggedLogger.d("Processing intent: " +
+                intent.getStringExtra(MyBroadcastReceiver.EXTRA_ARTIST) + " - " +
+                intent.getStringExtra(MyBroadcastReceiver.EXTRA_TRACK) + " (" +
+                intent.getBooleanExtra(MyBroadcastReceiver.EXTRA_IS_PLAYING, false) + ")")
     }
 
     companion object {
         const val ACTION_PROCESS_TRACK = "ACTION_PROCESS_TRACK"
-
-        private fun isThisTrack(prevTrack: Track, track: Track) =
-                prevTrack.artist == track.artist && prevTrack.title == track.title
 
         fun tracksAsScrobbleMap(trackList: List<Track>): Map<String, String> {
             val resultMap = HashMap<String, String>()
@@ -178,14 +210,6 @@ class JASService : Service() {
                 if (!track.album.isEmpty()) put("album", track.album)
             }
             return resultMap
-        }
-
-        fun isSameTrack(prevTrack: Track?, track: Track): Boolean {
-            return if (prevTrack == null) {
-                false
-            } else {
-                prevTrack.artist == track.artist && prevTrack.title == track.title
-            }
         }
     }
 }

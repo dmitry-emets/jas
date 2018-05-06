@@ -149,7 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="bottom"
-                        android:text="@string/ma_now_scrobbling_default_value"
+                        android:text="@string/ma_now_scrobbling_value_nothing"
                         android:textSize="13sp" />
 
                 </LinearLayout>

@@ -32,7 +32,7 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
         val tooOldData = System.currentTimeMillis() - lastUpdateTime > 1000 * 60 * 10
 
         if (!neverUpdated) {
-            viewState.updateLastFmCountSuccess(Pair(lastCount.toString(), formatTime(lastUpdateTime)))
+            viewState.updateLastFmCountSuccess(Pair(lastCount.toString(), formatTime(lastUpdateTime, context)))
         }
         if (neverUpdated || tooOldData) {
             fetchScrobbleCount(context)
@@ -42,16 +42,25 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
     fun processIntent(intent: Intent, context: Context) {
         when (intent.action) {
             ACTION_TRACK_START -> {
-                val title = intent.getStringExtra(TRACK_TITLE)
-                val artist = intent.getStringExtra(TRACK_ARTIST)
-                viewState.updateNowPlaying("$artist - $title")
-                canLove = true
-                viewState.showLikeFab()
-                viewState.toggleLikeFab(canLove)
-                setLoveFabInServerState(title, artist, context)
+                val scrobblingEnabled = AppSettings.getScrobblingEnabled(context)
+                if (scrobblingEnabled) {
+                    val title = intent.getStringExtra(TRACK_TITLE)
+                    val artist = intent.getStringExtra(TRACK_ARTIST)
+                    viewState.updateNowPlaying("$artist - $title")
+                    canLove = true
+                    viewState.showLikeFab()
+                    viewState.toggleLikeFab(canLove)
+                    setLoveFabInServerState(title, artist, context)
+                }
             }
             ACTION_TRACK_STOP -> {
-                viewState.updateNowPlaying("nothing")
+                val scrobblingEnabled = AppSettings.getScrobblingEnabled(context)
+                val nowPlayingText = if (scrobblingEnabled) {
+                    context.getString(R.string.ma_now_scrobbling_value_nothing)
+                } else {
+                    context.getString(R.string.ma_now_scrobbling_value_scrobbling_disabled)
+                }
+                viewState.updateNowPlaying(nowPlayingText)
                 viewState.hideLikeFab()
                 cachedLoved = false
             }
@@ -73,7 +82,7 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
                         null,
                         null
                 )
-        val pair = Pair(cursor.count.toString(), formatTime(System.currentTimeMillis()))
+        val pair = Pair(cursor.count.toString(), formatTime(System.currentTimeMillis(), context))
         cursor.close()
         trackDbHelper.close()
         viewState.updateTodayScrobbled(pair)
@@ -160,30 +169,30 @@ class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
                     AppSettings.setLastFmCount(context, it)
                     AppSettings.setLastFmCountTime(context, time)
                     viewState.hideRefresher()
-                    viewState.updateLastFmCountSuccess(Pair(it.toString(), formatTime(time)))
+                    viewState.updateLastFmCountSuccess(Pair(it.toString(), formatTime(time, context)))
                 }, {
                     val count = AppSettings.getLastFmCount(context)
                     val time = AppSettings.getLastFmCountTime(context)
                     viewState.hideRefresher()
-                    viewState.updateLastFmCountFailed(Pair(count.toString(), formatTime(time)))
+                    viewState.updateLastFmCountFailed(Pair(count.toString(), formatTime(time, context)))
                 })
     }
 
-    private fun formatTime(time: Long): String {
+    private fun formatTime(time: Long, context: Context): String {
         //TODO: use resources for strings
         if (time == -1L) {
-            return "never updated"
+            return context.getString(R.string.ma_update_time_never)
         }
         if (System.currentTimeMillis() - time < 1000 * 60 * 3) {
-            return "updated just now"
+            return context.getString(R.string.ma_update_time_just_now)
         }
         val dfDate = DateFormat.getDateInstance(DateFormat.MEDIUM)
         val dfTime = DateFormat.getTimeInstance(DateFormat.SHORT)
         val date = Date(time)
         return if (DateUtils.isToday(time)) {
-            String.format("updated today at %s", dfTime.format(date))
+            String.format(context.getString(R.string.ma_update_time_today), dfTime.format(date))
         } else {
-            String.format("updated %s at %s", dfDate.format(date), dfTime.format(date))
+            String.format(context.getString(R.string.ma_update_time_not_today), dfDate.format(date), dfTime.format(date))
         }
     }
 

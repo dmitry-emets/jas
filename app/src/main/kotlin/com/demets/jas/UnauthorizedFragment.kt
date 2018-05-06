@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.demets.jas.api.LfApiService
+import com.demets.jas.utils.NotificationUtil
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -71,6 +72,7 @@ class UnauthorizedFragment : Fragment() {
                                         ?.beginTransaction()
                                         ?.replace(android.R.id.content, AuthorizedFragment())
                                         ?.commit()
+                                NotificationUtil.restoreNowPlaying(context!!)
                             }
                         }, {
                             showToast(activity, getString(R.string.error_connection_message))

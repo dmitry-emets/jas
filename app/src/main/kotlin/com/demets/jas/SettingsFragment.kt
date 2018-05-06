@@ -4,11 +4,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.widget.Toast
+import com.demets.jas.mvp.presenter.AuthorizedPresenter
 import com.demets.jas.preference.SeekBarDialogPreference
 import com.demets.jas.preference.SeekBarDialogPreferenceDialogFragmentCompat
+import com.demets.jas.utils.NotificationUtil
 
 
 /**
@@ -37,6 +40,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     AppSettings.removeAuth(context)
                     preference.summary = ""
                     preference.isEnabled = false
+                    NotificationUtil.dismissNowPlaying(context!!)
                     return true
                 }
                 getString(R.string.pref_key_author) -> {
@@ -161,10 +165,25 @@ class SettingsFragment : PreferenceFragmentCompat(),
         //TODO: Research for right way to iterate over preferences.
         when (key) {
             getString(R.string.pref_key_scrobbling_enabled) -> {
-                findPreference(key).summary = if (AppSettings.getScrobblingEnabled(context)) {
-                    getString(R.string.pref_summary_scrobbling_enabled_true)
+                val scrobblingEnabled = AppSettings.getScrobblingEnabled(context)
+                if (scrobblingEnabled) {
+                    findPreference(key).summary = getString(R.string.pref_summary_scrobbling_enabled_true)
+                    NotificationUtil.restoreNowPlaying(context!!)
+                    val prevTrackInfo = AppSettings.getPreviousTrackInfo(context!!)
+                    if (prevTrackInfo?.isPlayingState == true) {
+                        val intentForUi = Intent(AuthorizedPresenter.ACTION_TRACK_START)
+                                .apply {
+                                    putExtra(AuthorizedPresenter.TRACK_TITLE, prevTrackInfo.track.title)
+                                    putExtra(AuthorizedPresenter.TRACK_ARTIST, prevTrackInfo.track.artist)
+                                    putExtra(AuthorizedPresenter.TRACK_ALBUM, prevTrackInfo.track.album)
+                                }
+                        LocalBroadcastManager.getInstance(context!!).sendBroadcast(intentForUi)
+                    }
                 } else {
-                    getString(R.string.pref_summary_scrobbling_enabled_false)
+                    findPreference(key).summary = getString(R.string.pref_summary_scrobbling_enabled_false)
+                    NotificationUtil.dismissNowPlaying(context!!)
+                    val intentForUi = Intent(AuthorizedPresenter.ACTION_TRACK_STOP)
+                    LocalBroadcastManager.getInstance(context!!).sendBroadcast(intentForUi)
                 }
             }
             getString(R.string.pref_key_min_time_to_scrobble) -> {
@@ -180,10 +199,13 @@ class SettingsFragment : PreferenceFragmentCompat(),
                         AppSettings.getMinDurationToScrobble(context))
             }
             getString(R.string.pref_key_notifications_enabled) -> {
-                findPreference(key).summary = if (AppSettings.getNotificationsEnabled(context)) {
-                    getString(R.string.pref_summary_notifications_enabled_true)
+                val notificationsEnabled = AppSettings.getNotificationsEnabled(context)
+                if (notificationsEnabled) {
+                    findPreference(key).summary = getString(R.string.pref_summary_notifications_enabled_true)
+                    NotificationUtil.restoreNowPlaying(context!!)
                 } else {
-                    getString(R.string.pref_summary_notifications_enabled_false)
+                    findPreference(key).summary = getString(R.string.pref_summary_notifications_enabled_false)
+                    NotificationUtil.dismissNowPlaying(context!!)
                 }
             }
             getString(R.string.pref_key_min_priority_notifications_enabled) -> {
