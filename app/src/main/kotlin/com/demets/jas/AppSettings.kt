@@ -6,26 +6,26 @@ import com.demets.jas.utils.TaggedLogger
 import com.google.gson.Gson
 
 /**
- * Created by dmitr on 11.02.2018.
+ * Class for store and retrieve application settings.
  */
 object AppSettings {
     const val PREFS_NAME = "com.demets.jas.prefs"
 
-    const val TOKEN = "key_token"
-    const val USERNAME = "key_username"
-    const val SESSION_KEY = "key_session"
+    private const val TOKEN = "key_token"
+    private const val USERNAME = "key_username"
+    private const val SESSION_KEY = "key_session"
 
-    const val SCROBBLING_ENABLED = "pref_scrobbling_enabled"
-    const val MIN_TIME_TO_SCROBBLE = "pref_min_time_to_scrobble"
-    const val MIN_PERCENT_TO_SCROBBLE = "pref_min_percent_to_scrobble"
-    const val MIN_TRACK_DURATION_TO_SCROBBLE = "pref_min_track_duration_to_scrobble"
-    const val NOTIFICATIONS_ENABLED = "pref_notifications_enabled"
-    const val MIN_PRIORITY_NOTIFICATIONS_ENABLED = "pref_min_priority_notifications_enabled"
-    const val ENABLE_TOAST_ON_SCROBBLE = "pref_enable_toast_on_scrobble"
+    private const val SCROBBLING_ENABLED = "pref_scrobbling_enabled"
+    private const val MIN_TIME_TO_SCROBBLE = "pref_min_time_to_scrobble"
+    private const val MIN_PERCENT_TO_SCROBBLE = "pref_min_percent_to_scrobble"
+    private const val MIN_TRACK_DURATION_TO_SCROBBLE = "pref_min_track_duration_to_scrobble"
+    private const val NOTIFICATIONS_ENABLED = "pref_notifications_enabled"
+    private const val MIN_PRIORITY_NOTIFICATIONS_ENABLED = "pref_min_priority_notifications_enabled"
+    private const val ENABLE_TOAST_ON_SCROBBLE = "pref_enable_toast_on_scrobble"
 
-    const val PREVIOUS_TRACK_INFO_KEY = "prev_track_info"
-    const val LAST_LASTFM_COUNT = "last_count"
-    const val LAST_COUNT_UPDATE_TIME = "last_count_update_time"
+    private const val PREVIOUS_TRACK_INFO_KEY = "prev_track_info"
+    private const val LAST_LASTFM_COUNT = "last_count"
+    private const val LAST_COUNT_UPDATE_TIME = "last_count_update_time"
 
     fun removeAuth(context: Context?) =
             context?.let {
