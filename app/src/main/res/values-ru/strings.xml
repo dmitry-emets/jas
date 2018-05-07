@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">JAS</string>
+    <!--Settings block-->
+    <string name="pref_section_scrobbling">Скробблинг</string>
+    <string name="pref_section_notifications">Уведомления</string>
+    <string name="pref_section_account">Аккаунт</string>
+    <string name="pref_section_credits">О программе</string>
+
+    <string name="pref_title_scrobbling_enabled">Включить скробблинг</string>
+    <string name="pref_summary_scrobbling_enabled_true">Скробблинг включен</string>
+    <string name="pref_summary_scrobbling_enabled_false">Скробблинг отключен</string>
+
+    <string name="pref_title_min_time_to_scrobble">Мин. время проигрывания до скробблинга</string>
+    <string name="pref_summary_min_time_to_scrobble">"Мин. время проигрывания: %s сек"</string>
+    <string name="pref_min_time_incorrect_value_message">Введите число между 1 и 60!</string>
+    <string name="pref_min_time_popup_text_template">%s сек</string>
+
+    <string name="pref_title_min_percent_to_scrobble">Мин. процент проигрывания трека до скробблинга</string>
+    <string name="pref_summary_min_percent_to_scrobble">"Мин. процент трека: %s%%"</string>
+    <string name="pref_min_percent_incorrect_value_message">Введите число между 1 и 100!</string>
+
+    <string name="pref_title_min_track_duration_to_scrobble">Мин. продолжительность трека</string>
+    <string name="pref_summary_min_track_duration_to_scrobble">"Мин. продолжительность трека: %s сек"</string>
+    <string name="pref_min_track_duration_incorrect_value_message">Введите число между 1 и 60!</string>
+    <string name="pref_min_track_duration_popup_text_template">%s сек</string>
+
+    <string name="pref_title_notifications_enabled">Включить уведомления</string>
+    <string name="pref_summary_notifications_enabled_true">Уведомления включены</string>
+    <string name="pref_summary_notifications_enabled_false">Уведомления отключены</string>
+
+    <string name="pref_title_min_priority_notifications_enabled">Мин. приоритет уведомлений</string>
+    <string name="pref_summary_min_priority_notifications_enabled_true">Минимальный приоритет</string>
+    <string name="pref_summary_min_priority_notifications_enabled_false">Приоритет по умолчанию</string>
+
+    <string name="pref_title_enable_toast_on_scrobble">Включить вспл. сооб-ие при скроббле</string>
+    <string name="pref_summary_enable_toast_on_scrobble_true">Сообщение включено</string>
+    <string name="pref_summary_enable_toast_on_scrobble_false">Сообщение отключено</string>
+
+    <string name="pref_title_logout">Выход</string>
+    <string name="pref_summary_logout">"Вы вошли как %s"</string>
+
+    <string name="pref_title_author">"Обратная связь"</string>
+
+    <string name="pref_title_logo_author">"Иконка приложения"</string>
+    <string name="pref_title_icons_author">"Иконки в интерфейсе"</string>
+    <string name="pref_title_version">"Версия"</string>
+
+    <string name="message_login_success">Вы вошли как %s</string>
+    <string name="menu_settings_label">Настройки</string>
+    <string name="auth_error_message">JAS не может соединиться с last.fm. Попробуйте ещё раз.</string>
+    <string name="error_connection_message">Невозможно соединиться с last.fm. Проверьте связь с интернетом.</string>
+    <string name="menu_tracks_label">Треки</string>
+
+    <string name="settings_activity_label">Настройки</string>
+    <!--Tracks screen block-->
+    <string name="tracks_activity_label">Треки</string>
+    <string name="tracks_activity_element_artist">%s</string>
+    <string name="tracks_activity_element_scrobbled">Заскробблен</string>
+    <string name="tracks_activity_element_not_scrobbled">Заскробблен локально</string>
+    <!--Authorized screen section-->
+    <string name="ma_total_played_label">треков заскробблено</string>
+    <string name="ma_today_played_label">треков заскробблено сегодня</string>
+    <string name="ma_now_scrobbling_label">Сейчас скробблится:</string>
+    <string name="ma_now_scrobbling_value_nothing">ничего</string>
+    <string name="ma_now_scrobbling_value_scrobbling_disabled">Скробблинг выключен :(</string>
+    <string name="ma_update_time_never">никогда не обновлялось</string>
+    <string name="ma_update_time_just_now">обновлено только что</string>
+    <string name="ma_update_time_today">обновлено сегодня в %s</string>
+    <string name="ma_update_time_not_today">обновлено %s в %s</string>
+    <string name="ma_lastfm_update_failed_message">Ошибка при получении количества треков с last.fm. Попробуйте ещё раз.</string>
+    <string name="ma_track_loved_message">Трек добавлен в любимые!</string>
+    <string name="ma_track_unloved_message">Трек убран из любимых!</string>
+    <string name="ma_track_love_failed_message">Ошибка при добавлении трека в любимые. :( Попробуйте ещё раз.</string>
+    <string name="ma_track_unlove_failed_message">Ошибка при попытке убрать трек из любимых. :( Попробуйте ещё раз.</string>
+    <!--Unauthorized screen block-->
+    <string name="log_in_button_text">Войти</string>
+    <string name="welcome_text_main">Привет! Добро пожаловать в JAS. ;)</string>
+    <string name="welcome_text_additional">Чтобы начать скробблить, войдите в свой аккаунт last.fm.</string>
+    <!--Notifications and toasts-->
+    <string name="notif_now_playing_label">Сейчас скробблится</string>
+    <string name="toast_scrobbled">Заскробблено: %s - %s</string>
+</resources>
