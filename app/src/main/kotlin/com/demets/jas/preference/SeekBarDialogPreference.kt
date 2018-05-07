@@ -1,6 +1,7 @@
 package com.demets.jas.preference
 
 import android.content.Context
+import android.content.res.Resources
 import android.content.res.TypedArray
 import android.support.v7.preference.DialogPreference
 import android.util.AttributeSet
@@ -29,7 +30,12 @@ class SeekBarDialogPreference @JvmOverloads constructor(context: Context,
         attrs?.let {
             minValue = attrs.getAttributeIntValue(null, "min", 0)
             maxValue = attrs.getAttributeIntValue(null, "max", 100)
-            textViewTemplate = attrs.getAttributeValue(null, "textFormTemplate")
+            textViewTemplate = try {
+                val textViewTemplateRes = attrs.getAttributeResourceValue(null, "textFormTemplate", 0)
+                context.getString(textViewTemplateRes)
+            } catch (e: Resources.NotFoundException) {
+                attrs.getAttributeValue(null, "textFormTemplate")
+            }
         }
     }
 

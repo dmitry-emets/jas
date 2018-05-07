@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
 import com.demets.jas.AppSettings
+import com.demets.jas.R
 import com.demets.jas.api.LfApiService
 import com.demets.jas.db.TrackDbHelper
 import com.demets.jas.db.contract.TrackContract
@@ -112,7 +113,8 @@ class JASService : Service() {
 
     private fun triggerToast(prevTrack: Track) {
         if (AppSettings.getEnableToastOnScrobble(this)) {
-            Toast.makeText(this, "Scrobbled: ${prevTrack.artist} - ${prevTrack.title}", Toast.LENGTH_LONG).show()
+            val message = String.format(getString(R.string.toast_scrobbled), prevTrack.artist, prevTrack.title)
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         }
     }
 

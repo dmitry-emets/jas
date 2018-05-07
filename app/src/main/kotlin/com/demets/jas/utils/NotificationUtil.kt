@@ -73,7 +73,7 @@ object NotificationUtil {
                     .setPriority(priority)
                     .setSmallIcon(R.drawable.headphones)
                     .setContentTitle("${track.artist} - ${track.title}")
-                    .setContentText("Now scrobbling")
+                    .setContentText(context.getString(R.string.notif_now_playing_label))
                     .setContentIntent(resultPendingIntent)
                     .build()
             notification.flags = Notification.FLAG_ONGOING_EVENT

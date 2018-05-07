@@ -1,95 +1,104 @@
 <resources>
-    <string name="app_name">JAS</string>
+    <string name="app_name" translatable="false">JAS</string>
     <!--Settings block-->
+    <string name="pref_section_scrobbling">Scrobbling</string>
+    <string name="pref_section_notifications">Notifications</string>
+    <string name="pref_section_account">Account</string>
+    <string name="pref_section_credits">Credits</string>
+
     <string name="pref_key_scrobbling_enabled" translatable="false">pref_scrobbling_enabled</string>
-    <string name="pref_title_scrobbling_enabled" translatable="true">Enable scrobbling</string>
-    <string name="pref_summary_scrobbling_enabled_true" translatable="true">Scrobbling enabled</string>
-    <string name="pref_summary_scrobbling_enabled_false" translatable="true">Scrobbling disabled</string>
+    <string name="pref_title_scrobbling_enabled">Enable scrobbling</string>
+    <string name="pref_summary_scrobbling_enabled_true">Scrobbling enabled</string>
+    <string name="pref_summary_scrobbling_enabled_false">Scrobbling disabled</string>
 
     <string name="pref_key_min_time_to_scrobble" translatable="false">pref_min_time_to_scrobble</string>
-    <string name="pref_title_min_time_to_scrobble" translatable="true">Minimum play time to scrobble</string>
-    <string name="pref_summary_min_time_to_scrobble" translatable="true">"Minimum time set to %s seconds"</string>
-    <string name="pref_min_time_incorrect_value_message" translatable="true">Enter a number between 1 and 60!</string>
+    <string name="pref_title_min_time_to_scrobble">Minimum play time to scrobble</string>
+    <string name="pref_summary_min_time_to_scrobble">"Minimum time set to %s seconds"</string>
+    <string name="pref_min_time_incorrect_value_message">Enter a number between 1 and 60!</string>
+    <string name="pref_min_time_popup_text_template">%s sec</string>
 
     <string name="pref_key_min_percent_to_scrobble" translatable="false">pref_min_percent_to_scrobble</string>
-    <string name="pref_title_min_percent_to_scrobble" translatable="true">Minimum percent of track duration to scrobble</string>
-    <string name="pref_summary_min_percent_to_scrobble" translatable="true">"Minimum percent set to %s percents"</string>
-    <string name="pref_min_percent_incorrect_value_message" translatable="true">Enter a number between 1 and 100!</string>
+    <string name="pref_title_min_percent_to_scrobble">Minimum percent of track duration to scrobble</string>
+    <string name="pref_summary_min_percent_to_scrobble">"Minimum percent set to %s%%"</string>
+    <string name="pref_min_percent_incorrect_value_message">Enter a number between 1 and 100!</string>
+    <string name="pref_min_percent_popup_text_template" translatable="false">%s%%</string>
 
     <string name="pref_key_min_track_duration_to_scrobble" translatable="false">pref_min_track_duration_to_scrobble</string>
-    <string name="pref_title_min_track_duration_to_scrobble" translatable="true">Minimum track duration</string>
-    <string name="pref_summary_min_track_duration_to_scrobble" translatable="true">"Minimum track duration set to %s seconds"</string>
-    <string name="pref_min_track_duration_incorrect_value_message" translatable="true">Enter a number between 1 and 60!</string>
+    <string name="pref_title_min_track_duration_to_scrobble">Minimum track duration</string>
+    <string name="pref_summary_min_track_duration_to_scrobble">"Minimum track duration set to %s seconds"</string>
+    <string name="pref_min_track_duration_incorrect_value_message">Enter a number between 1 and 60!</string>
+    <string name="pref_min_track_duration_popup_text_template">%s sec</string>
 
     <string name="pref_key_notifications_enabled" translatable="false">pref_notifications_enabled</string>
-    <string name="pref_title_notifications_enabled" translatable="true">Enable notifications</string>
-    <string name="pref_summary_notifications_enabled_true" translatable="true">Notifications enabled</string>
-    <string name="pref_summary_notifications_enabled_false" translatable="true">Notifications disabled</string>
+    <string name="pref_title_notifications_enabled">Enable notifications</string>
+    <string name="pref_summary_notifications_enabled_true">Notifications enabled</string>
+    <string name="pref_summary_notifications_enabled_false">Notifications disabled</string>
 
     <string name="pref_key_min_priority_notifications_enabled" translatable="false">pref_min_priority_notifications_enabled</string>
-    <string name="pref_title_min_priority_notifications_enabled" translatable="true">Minimum priority notifications</string>
-    <string name="pref_summary_min_priority_notifications_enabled_true" translatable="true">Minimum priority set</string>
-    <string name="pref_summary_min_priority_notifications_enabled_false" translatable="true">Default priority set</string>
+    <string name="pref_title_min_priority_notifications_enabled">Minimum priority notifications</string>
+    <string name="pref_summary_min_priority_notifications_enabled_true">Minimum priority set</string>
+    <string name="pref_summary_min_priority_notifications_enabled_false">Default priority set</string>
 
     <string name="pref_key_enable_toast_on_scrobble" translatable="false">pref_enable_toast_on_scrobble</string>
-    <string name="pref_title_enable_toast_on_scrobble" translatable="true">Enable toast message on scrobble</string>
-    <string name="pref_summary_enable_toast_on_scrobble_true" translatable="true">Toast message enabled</string>
-    <string name="pref_summary_enable_toast_on_scrobble_false" translatable="true">Toast message disabled</string>
+    <string name="pref_title_enable_toast_on_scrobble">Enable toast message on scrobble</string>
+    <string name="pref_summary_enable_toast_on_scrobble_true">Toast message enabled</string>
+    <string name="pref_summary_enable_toast_on_scrobble_false">Toast message disabled</string>
 
     <string name="pref_key_logout" translatable="false">pref_logout</string>
-    <string name="pref_title_logout" translatable="true">Logout</string>
-    <string name="pref_summary_logout" translatable="true">"You logged as %s"</string>
+    <string name="pref_title_logout">Logout</string>
+    <string name="pref_summary_logout">"You logged as %s"</string>
 
     <string name="pref_key_author" translatable="false">"pref_author"</string>
-    <string name="pref_title_author" translatable="true">"Developer contacts"</string>
-    <string name="pref_summary_author" translatable="true">"Dmitry Emets [dmitriyemets@gmail.com] (en/ru)"</string>
+    <string name="pref_title_author">"Developer contacts"</string>
+    <string name="pref_summary_author" translatable="false">"Dmitry Emets [dmitriyemets@gmail.com] (en/ru)"</string>
 
     <string name="pref_key_logo_author" translatable="false">"pref_logo_author"</string>
-    <string name="pref_title_logo_author" translatable="true">"Application Icon"</string>
-    <string name="pref_summary_logo_author" translatable="true">"Icon made by Freepik from www.flaticon.com\nLicensed under CC 3.0 BY</string>
+    <string name="pref_title_logo_author">"Application Icon"</string>
+    <string name="pref_summary_logo_author">"Icon made by Freepik from www.flaticon.com\nLicensed under CC 3.0 BY</string>
 
     <string name="pref_key_icons_author" translatable="false">"pref_icons_author"</string>
-    <string name="pref_title_icons_author" translatable="true">"Icons"</string>
-    <string name="pref_summary_icons_author" translatable="true">"Icons made by Gregor Cresnar from www.flaticon.com\nLicensed under CC 3.0 BY"</string>
+    <string name="pref_title_icons_author">"Icons"</string>
+    <string name="pref_summary_icons_author">"Icons made by Gregor Cresnar from www.flaticon.com\nLicensed under CC 3.0 BY"</string>
 
     <string name="pref_key_version" translatable="false">"pref_version"</string>
-    <string name="pref_title_version" translatable="true">"Version"</string>
+    <string name="pref_title_version">"Version"</string>
     <string name="pref_summary_version" translatable="false">"Beta 0.3.20180505"</string>
 
-    <string name="message_login_success" translatable="true">You logged in as %s</string>
-    <string name="menu_settings_label" translatable="true">Settings</string>
+    <string name="message_login_success">You logged in as %s</string>
+    <string name="menu_settings_label">Settings</string>
     <string name="shar_pref_lfauth" translatable="false">com.demets.jas.lfmauth</string>
-    <string name="sign_out_button_text">Sign Out</string>
-    <string name="auth_error_message" translatable="true">JAS can\'t connect to last.fm. Please try again.</string>
-    <string name="error_connection_message" translatable="true">Can\'t connect to last.fm. Check your network connection.</string>
-    <string name="successfully_logout_message" translatable="true">Successfully log out</string>
-    <string name="menu_tracks_label" translatable="true">Tracks</string>
+    <string name="auth_error_message">JAS can\'t connect to last.fm. Please try again.</string>
+    <string name="error_connection_message">Can\'t connect to last.fm. Check your network connection.</string>
+    <string name="menu_tracks_label">Tracks</string>
 
-    <string name="settings_activity_label" translatable="true">Settings</string>
+    <string name="settings_activity_label">Settings</string>
     <!--Tracks screen block-->
-    <string name="tracks_activity_label" translatable="true">Tracks</string>
-    <string name="tracks_activity_element_artist" translatable="true">by %s</string>
-    <string name="tracks_activity_element_scrobbled" translatable="true">Scrobbled</string>
-    <string name="tracks_activity_element_not_scrobbled" translatable="true">Not Scrobbled</string>
+    <string name="tracks_activity_label">Tracks</string>
+    <string name="tracks_activity_element_artist">by %s</string>
+    <string name="tracks_activity_element_scrobbled">Scrobbled</string>
+    <string name="tracks_activity_element_not_scrobbled">Cached scrobble</string>
     <!--Authorized screen section-->
     <string name="ma_total_played_default_count">0</string>
-    <string name="ma_total_played_label" translatable="true">tracks played</string>
+    <string name="ma_total_played_label">tracks played</string>
     <string name="ma_today_played_default_count">0</string>
-    <string name="ma_today_played_label" translatable="true">tracks scrobbled today</string>
-    <string name="ma_now_scrobbling_label" translatable="true">Now scrobbling:</string>
-    <string name="ma_now_scrobbling_value_nothing" translatable="true">nothing</string>
-    <string name="ma_now_scrobbling_value_scrobbling_disabled" translatable="true">Scrobbling disabled :(</string>
-    <string name="ma_update_time_never" translatable="true">never updated</string>
-    <string name="ma_update_time_just_now" translatable="true">updated just now</string>
-    <string name="ma_update_time_today" translatable="true">updated today at %s</string>
-    <string name="ma_update_time_not_today" translatable="true">updated %s at %s</string>
-    <string name="ma_lastfm_update_failed_message" translatable="true">Error while update lastFM count</string>
-    <string name="ma_track_loved_message" translatable="true">Track loved!</string>
-    <string name="ma_track_unloved_message" translatable="true">Track unloved!</string>
-    <string name="ma_track_love_failed_message" translatable="true">Error while loving track. :( Try again.</string>
-    <string name="ma_track_unlove_failed_message" translatable="true">Error while unloving track. :( Try again.</string>
+    <string name="ma_today_played_label">tracks scrobbled today</string>
+    <string name="ma_now_scrobbling_label">Now scrobbling:</string>
+    <string name="ma_now_scrobbling_value_nothing">nothing</string>
+    <string name="ma_now_scrobbling_value_scrobbling_disabled">Scrobbling disabled :(</string>
+    <string name="ma_update_time_never">never updated</string>
+    <string name="ma_update_time_just_now">updated just now</string>
+    <string name="ma_update_time_today">updated today at %s</string>
+    <string name="ma_update_time_not_today">updated %s at %s</string>
+    <string name="ma_lastfm_update_failed_message">Error while update lastFM count</string>
+    <string name="ma_track_loved_message">Track loved!</string>
+    <string name="ma_track_unloved_message">Track unloved!</string>
+    <string name="ma_track_love_failed_message">Error while loving track. :( Try again.</string>
+    <string name="ma_track_unlove_failed_message">Error while unloving track. :( Try again.</string>
     <!--Unauthorized screen block-->
-    <string name="log_in_button_text" translatable="true">Log In</string>
-    <string name="welcome_text_main" translatable="true">Hi! Welcome to JAS. ;)</string>
-    <string name="welcome_text_additional" translatable="true">Please log in your last.fm account to start scrobbling.</string>
+    <string name="log_in_button_text">Log In</string>
+    <string name="welcome_text_main">Hi! Welcome to JAS. ;)</string>
+    <string name="welcome_text_additional">Please log in your last.fm account to start scrobbling.</string>
+    <!--Notifications and toasts-->
+    <string name="notif_now_playing_label">Now scrobbling</string>
+    <string name="toast_scrobbled">Scrobbled: %s - %s</string>
 </resources>
