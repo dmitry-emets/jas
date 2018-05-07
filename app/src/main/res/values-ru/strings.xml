@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">JAS</string>
     <!--Settings block-->
     <string name="pref_section_scrobbling">Скробблинг</string>
     <string name="pref_section_notifications">Уведомления</string>
