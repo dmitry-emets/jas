@@ -12,10 +12,10 @@ object IntentUtil {
             if (extras.containsKey(it)) {
                 val extraValue = extras[it]
                 return when (extraValue) {
-                    is Short,
-                    is Byte,
-                    is Int,
-                    is Long -> extraValue as Long
+                    is Short -> extraValue.toLong()
+                    is Byte -> extraValue.toLong()
+                    is Int -> extraValue.toLong()
+                    is Long -> extraValue
                     else -> defaultValue
                 }
             }
@@ -30,10 +30,10 @@ object IntentUtil {
                 val extraValue = extras[it]
                 return when (extraValue) {
                     is Boolean -> extraValue
-                    is Short,
-                    is Byte,
-                    is Int,
-                    is Long -> extraValue as Long > 0
+                    is Short -> extraValue.toLong() > 0
+                    is Byte -> extraValue.toLong() > 0
+                    is Int -> extraValue.toLong() > 0
+                    is Long -> extraValue > 0
                     else -> defaultValue
                 }
             }
