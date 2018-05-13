@@ -85,7 +85,7 @@ class JASService : Service() {
         val minPercent = AppSettings.getMinPercentToScrobble(this)
 
         val playedTimeInSecs = (System.currentTimeMillis() - prevTrack.timestamp) / 1000
-        val playedPercent = playedTimeInSecs * 1000 * 100 / prevTrack.duration
+        val playedPercent = if (prevTrack.duration == 0L) 100 else playedTimeInSecs * 1000 * 100 / prevTrack.duration
 
         TaggedLogger.d("Track duration: ${prevTrack.duration}")
         TaggedLogger.d("Min duration: ${minDuration * 1000}")
