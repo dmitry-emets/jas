@@ -1,9 +1,6 @@
 package com.demets.jas
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
@@ -14,7 +11,7 @@ import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.mvp.presenter.TracksPresenter
 import com.demets.jas.mvp.view.TracksView
-import kotlinx.android.synthetic.main.track_list.*
+import kotlinx.android.synthetic.main.track_list.rv_tracks
 
 /**
  * Created by dmitr on 19.02.2018.
@@ -28,7 +25,7 @@ class TracksActivity : MvpAppCompatActivity(), TracksView {
 
     override fun updateView(cursor: Cursor) {
         mRecyclerView.adapter = TrackAdapter(cursor)
-        mRecyclerView.adapter.notifyDataSetChanged()
+        (mRecyclerView.adapter as TrackAdapter).notifyDataSetChanged()
         //hide or show no tracks message
     }
 

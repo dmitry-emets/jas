@@ -7,15 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.demets.jas.db.contract.TrackContract
-import kotlinx.android.synthetic.main.track_list_item.view.*
+import kotlinx.android.synthetic.main.track_list_item.view.tv_artist_item
+import kotlinx.android.synthetic.main.track_list_item.view.tv_scrobbled_item
+import kotlinx.android.synthetic.main.track_list_item.view.tv_track_item
 
 /**
  * Created by dmitr on 20.02.2018.
  */
-class TrackAdapter(var mCursor: Cursor) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): TrackViewHolder {
-        val context = parent?.context
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+        val context = parent.context
         val inflater = LayoutInflater.from(context)
         val view = inflater.inflate(R.layout.track_list_item, parent, false)
         return TrackViewHolder(view)
@@ -23,7 +25,7 @@ class TrackAdapter(var mCursor: Cursor) : RecyclerView.Adapter<TrackAdapter.Trac
 
     override fun getItemCount(): Int = mCursor.count
 
-    override fun onBindViewHolder(viewHolder: TrackViewHolder?, position: Int) {
+    override fun onBindViewHolder(viewHolder: TrackViewHolder, position: Int) {
         if (!mCursor.moveToPosition(position)) return
         val trackColumnIndex = mCursor.getColumnIndex(TrackContract.TrackEntry.COLUMN_TRACK)
         val track = mCursor.getString(trackColumnIndex)
@@ -31,7 +33,7 @@ class TrackAdapter(var mCursor: Cursor) : RecyclerView.Adapter<TrackAdapter.Trac
         val artist = mCursor.getString(artistColumnIndex)
         val isScrobbledColumnIndex = mCursor.getColumnIndex(TrackContract.TrackEntry.COLUMN_SCROBBLED)
         val isScrobbled = mCursor.getInt(isScrobbledColumnIndex) == 1
-        viewHolder?.bind(track, artist, isScrobbled)
+        viewHolder.bind(track, artist, isScrobbled)
     }
 
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

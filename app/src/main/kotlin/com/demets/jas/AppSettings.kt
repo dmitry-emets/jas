@@ -55,12 +55,8 @@ object AppSettings {
             }
 
     fun getToken(context: Context?): String =
-            if (context != null) {
-                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                        .getString(TOKEN, "")
-            } else {
-                ""
-            }
+            context?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                ?.getString(TOKEN, "") ?: ""
 
     fun setUsername(context: Context?, username: String) =
             context?.let {
@@ -71,12 +67,8 @@ object AppSettings {
             }
 
     fun getUsername(context: Context?): String =
-            if (context != null) {
-                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                        .getString(USERNAME, "")
-            } else {
-                ""
-            }
+            context?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                ?.getString(USERNAME, "") ?: ""
 
     fun setSessionKey(context: Context?, sessionKey: String) =
             context?.let {
@@ -87,12 +79,8 @@ object AppSettings {
             }
 
     fun getSessionKey(context: Context?): String =
-            if (context != null) {
-                context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                        .getString(SESSION_KEY, "")
-            } else {
-                ""
-            }
+            context?.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                        ?.getString(SESSION_KEY, "") ?: ""
 
     fun setScrobblingEnabled(context: Context?, bool: Boolean) =
             context?.let {

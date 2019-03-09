@@ -58,7 +58,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         data = Uri.parse("https://www.freepik.com")
                     }
-                    if (intent.resolveActivity(context?.packageManager) != null) {
+                    if (intent.resolveActivity(context?.packageManager!!) != null) {
                         startActivity(intent)
                     }
                     return true
@@ -67,7 +67,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
                     val intent = Intent(Intent.ACTION_VIEW).apply {
                         data = Uri.parse("https://www.flaticon.com/authors/gregor-cresnar")
                     }
-                    if (intent.resolveActivity(context?.packageManager) != null) {
+                    if (intent.resolveActivity(context?.packageManager!!) != null) {
                         startActivity(intent)
                     }
                     return true
