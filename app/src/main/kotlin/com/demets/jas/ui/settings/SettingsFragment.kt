@@ -1,4 +1,4 @@
-package com.demets.jas
+package com.demets.jas.ui.settings
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,9 +8,11 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import android.widget.Toast
-import com.demets.jas.mvp.presenter.AuthorizedPresenter
+import com.demets.jas.AppSettings
+import com.demets.jas.R
 import com.demets.jas.preference.SeekBarDialogPreference
 import com.demets.jas.preference.SeekBarDialogPreferenceDialogFragmentCompat
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter
 import com.demets.jas.utils.NotificationUtil
 
 
@@ -34,8 +36,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
 
     override fun onPreferenceClick(preference: Preference?): Boolean {
         if (preference != null) {
-            val key = preference.key
-            when (key) {
+            when (preference.key) {
                 getString(R.string.pref_key_logout) -> {
                     AppSettings.removeAuth(context)
                     preference.summary = ""

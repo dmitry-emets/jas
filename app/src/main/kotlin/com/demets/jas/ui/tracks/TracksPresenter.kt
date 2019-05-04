@@ -1,4 +1,4 @@
-package com.demets.jas.mvp.presenter
+package com.demets.jas.ui.tracks
 
 import android.content.Context
 import android.content.Intent
@@ -12,8 +12,8 @@ import com.demets.jas.api.LfApiService
 import com.demets.jas.db.TrackDbHelper
 import com.demets.jas.db.contract.TrackContract
 import com.demets.jas.model.Track
-import com.demets.jas.mvp.view.TracksView
 import com.demets.jas.service.JASService
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter
 import com.demets.jas.utils.TaggedLogger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

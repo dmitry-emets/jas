@@ -1,8 +1,9 @@
-package com.demets.jas
+package com.demets.jas.ui.settings
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import com.demets.jas.R
 
 /**
  * Created by DEmets on 05.02.2018.

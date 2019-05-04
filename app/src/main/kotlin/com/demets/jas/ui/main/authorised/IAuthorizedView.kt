@@ -1,11 +1,11 @@
-package com.demets.jas.mvp.view
+package com.demets.jas.ui.main.authorised
 
 import com.arellomobile.mvp.MvpView
 import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface AuthorizedView : MvpView {
+interface IAuthorizedView : MvpView {
     fun askLastFmCount()
     fun updateLastFmCountSuccess(pair: Pair<String, String>)
     fun updateLastFmCountFailed(pair: Pair<String, String>)

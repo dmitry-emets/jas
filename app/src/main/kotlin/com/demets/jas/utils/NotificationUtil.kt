@@ -9,9 +9,9 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT
 import android.support.v4.app.NotificationCompat.PRIORITY_LOW
 import com.demets.jas.AppSettings
-import com.demets.jas.MainActivity
 import com.demets.jas.R
 import com.demets.jas.model.Track
+import com.demets.jas.ui.main.MainActivity
 
 /**
  * Util class for status bar notifications.

@@ -1,4 +1,4 @@
-package com.demets.jas
+package com.demets.jas.ui.tracks
 
 import android.database.Cursor
 import android.support.v7.widget.RecyclerView
@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.demets.jas.R
 import com.demets.jas.db.contract.TrackContract
+import com.demets.jas.ui.tracks.TrackAdapter.TrackViewHolder
 import kotlinx.android.synthetic.main.track_list_item.view.tv_artist_item
 import kotlinx.android.synthetic.main.track_list_item.view.tv_scrobbled_item
 import kotlinx.android.synthetic.main.track_list_item.view.tv_track_item
@@ -14,7 +16,7 @@ import kotlinx.android.synthetic.main.track_list_item.view.tv_track_item
 /**
  * Created by dmitr on 20.02.2018.
  */
-class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val context = parent.context

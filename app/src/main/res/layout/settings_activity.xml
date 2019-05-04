@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <fragment
-        android:name="com.demets.jas.SettingsFragment"
+        android:name="com.demets.jas.ui.settings.SettingsFragment"
         android:tag=".SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

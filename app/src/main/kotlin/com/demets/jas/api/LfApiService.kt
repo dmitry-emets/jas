@@ -7,10 +7,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 import java.math.BigInteger
 import java.security.MessageDigest
 
@@ -354,13 +351,13 @@ interface LfApiService {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             val httpClient = OkHttpClient.Builder()
-                    .addInterceptor({ chain ->
+                    .addInterceptor { chain ->
                         val originalRequest = chain.request()
                         val originalUrl = originalRequest.url()
                         var url = originalUrl.newBuilder()
-                                .addQueryParameter("api_key", API_KEY)
-                                .addQueryParameter("format", FORMAT)
-                                .build()
+                            .addQueryParameter("api_key", API_KEY)
+                            .addQueryParameter("format", FORMAT)
+                            .build()
                         val query = url.query()
                         println(query)
                         //Calculate and add api_sig for auth methods.
@@ -370,15 +367,15 @@ interface LfApiService {
                                 params[url.queryParameterName(i)] = url.queryParameterValue(i)
                             }
                             url = url.newBuilder()
-                                    .addQueryParameter("api_sig", generateMd5(params))
-                                    .build()
+                                .addQueryParameter("api_sig", generateMd5(params))
+                                .build()
                         }
                         val request = originalRequest.newBuilder()
-                                .url(url)
-                                .build()
+                            .url(url)
+                            .build()
                         chain.proceed(request)
-                    })
-                    .addInterceptor(httpLoggingInterceptor)
+                    }
+                .addInterceptor(httpLoggingInterceptor)
                     .build()
 
             val retrofit = Retrofit.Builder()

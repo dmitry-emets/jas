@@ -12,8 +12,8 @@ import com.demets.jas.db.TrackDbHelper
 import com.demets.jas.db.contract.TrackContract
 import com.demets.jas.model.PreviousTrackInfo
 import com.demets.jas.model.Track
-import com.demets.jas.mvp.presenter.AuthorizedPresenter
 import com.demets.jas.receivers.MyBroadcastReceiver
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter
 import com.demets.jas.utils.NotificationUtil
 import com.demets.jas.utils.TaggedLogger
 import io.reactivex.android.schedulers.AndroidSchedulers

@@ -1,4 +1,4 @@
-package com.demets.jas.mvp.presenter
+package com.demets.jas.ui.main.authorised
 
 import android.content.Context
 import android.content.Intent
@@ -11,15 +11,14 @@ import com.demets.jas.R
 import com.demets.jas.api.LfApiService
 import com.demets.jas.db.TrackDbHelper
 import com.demets.jas.db.contract.TrackContract
-import com.demets.jas.mvp.view.AuthorizedView
 import com.demets.jas.utils.TaggedLogger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.DateFormat
-import java.util.*
+import java.util.Date
 
 @InjectViewState
-class AuthorizedPresenter : MvpPresenter<AuthorizedView>() {
+class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
     private val lfApiService = LfApiService.create()
     private var canLove = true
     private var cachedLoved = false

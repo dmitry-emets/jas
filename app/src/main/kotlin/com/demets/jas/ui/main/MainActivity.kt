@@ -1,4 +1,4 @@
-package com.demets.jas
+package com.demets.jas.ui.main
 
 import android.content.Context
 import android.content.Intent
@@ -7,21 +7,33 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import com.arellomobile.mvp.MvpAppCompatFragment
+import com.demets.jas.AppSettings
+import com.demets.jas.R
+import com.demets.jas.ui.main.authorised.AuthorizedFragment
+import com.demets.jas.ui.main.unauthorised.UnauthorizedFragment
+import com.demets.jas.ui.settings.SettingsActivity
+import com.demets.jas.ui.tracks.TracksActivity
 
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PreferenceManager.setDefaultValues(this, AppSettings.PREFS_NAME, Context.MODE_PRIVATE,
-                R.xml.preferences, false)
-        val fragment = if (AppSettings.getSessionKey(this).isEmpty()) {
+        PreferenceManager.setDefaultValues(
+            this,
+            AppSettings.PREFS_NAME,
+            Context.MODE_PRIVATE,
+            R.xml.preferences,
+            false
+        )
+        val fragment : MvpAppCompatFragment = if (AppSettings.getSessionKey(this).isEmpty()) {
             UnauthorizedFragment()
         } else {
             AuthorizedFragment()
         }
         supportFragmentManager.beginTransaction()
-                .replace(android.R.id.content, fragment)
-                .commit()
+            .replace(android.R.id.content, fragment)
+            .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

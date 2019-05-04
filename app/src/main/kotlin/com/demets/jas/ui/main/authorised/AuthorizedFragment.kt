@@ -1,9 +1,6 @@
-package com.demets.jas
+package com.demets.jas.ui.main.authorised
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
@@ -13,24 +10,25 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.demets.jas.mvp.presenter.AuthorizedPresenter
-import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_SCROBBLED
-import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_START
-import com.demets.jas.mvp.presenter.AuthorizedPresenter.Companion.ACTION_TRACK_STOP
-import com.demets.jas.mvp.view.AuthorizedView
+import com.demets.jas.AppSettings
+import com.demets.jas.R
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter.Companion.ACTION_TRACK_SCROBBLED
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter.Companion.ACTION_TRACK_START
+import com.demets.jas.ui.main.authorised.AuthorizedPresenter.Companion.ACTION_TRACK_STOP
+import com.demets.jas.ui.main.unauthorised.UnauthorizedFragment
 import kotlinx.android.synthetic.main.authorized_fragment.*
 
 
 /**
  * Created by dmitr on 06.02.2018.
  */
-class AuthorizedFragment : MvpAppCompatFragment(), AuthorizedView {
+class AuthorizedFragment : MvpAppCompatFragment(), IAuthorizedView {
     override fun onResume() {
         super.onResume()
         if (AppSettings.getSessionKey(activity).isEmpty()) {
             fragmentManager?.beginTransaction()
-                    ?.replace(android.R.id.content, UnauthorizedFragment())
-                    ?.commit()
+                ?.replace(android.R.id.content, UnauthorizedFragment())
+                ?.commit()
         }
     }
 

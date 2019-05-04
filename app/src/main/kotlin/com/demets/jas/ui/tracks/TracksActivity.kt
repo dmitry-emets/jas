@@ -1,4 +1,4 @@
-package com.demets.jas
+package com.demets.jas.ui.tracks
 
 import android.content.*
 import android.database.Cursor
@@ -9,8 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
-import com.demets.jas.mvp.presenter.TracksPresenter
-import com.demets.jas.mvp.view.TracksView
+import com.demets.jas.R
 import kotlinx.android.synthetic.main.track_list.rv_tracks
 
 /**
