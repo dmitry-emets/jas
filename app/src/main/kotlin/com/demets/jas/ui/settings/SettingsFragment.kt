@@ -4,10 +4,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.preference.Preference
-import android.support.v7.preference.PreferenceFragmentCompat
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.demets.jas.AppSettings
 import com.demets.jas.R
 import com.demets.jas.preference.SeekBarDialogPreference
@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (preference is SeekBarDialogPreference) {
             val dialogFragment = SeekBarDialogPreferenceDialogFragmentCompat.newInstance(preference.key)
             dialogFragment.setTargetFragment(this, 0)
-            dialogFragment.show(this.fragmentManager, "android.support.v7.preference.PreferenceFragment.DIALOG")
+            dialogFragment.show(this.fragmentManager, "androidx.preference.PreferenceFragment.DIALOG")
         } else {
             super.onDisplayPreferenceDialog(preference)
         }

@@ -1,11 +1,12 @@
 package com.demets.jas.preference
 
 import android.os.Bundle
-import android.support.v7.preference.PreferenceDialogFragmentCompat
 import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
-import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.*
+import androidx.preference.PreferenceDialogFragmentCompat
+import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.seekbar
+import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.textview
 
 /**
  * Created by dmitr on 26.02.2018.

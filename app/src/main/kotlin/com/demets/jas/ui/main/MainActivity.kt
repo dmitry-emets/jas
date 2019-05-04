@@ -3,13 +3,13 @@ package com.demets.jas.ui.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
-import com.arellomobile.mvp.MvpAppCompatFragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.demets.jas.AppSettings
 import com.demets.jas.R
+import com.demets.jas.androidx.moxy.MvpAppCompatFragment
 import com.demets.jas.ui.main.authorised.AuthorizedFragment
 import com.demets.jas.ui.main.unauthorised.UnauthorizedFragment
 import com.demets.jas.ui.settings.SettingsActivity
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
             R.xml.preferences,
             false
         )
-        val fragment : MvpAppCompatFragment = if (AppSettings.getSessionKey(this).isEmpty()) {
+        val fragment: MvpAppCompatFragment = if (AppSettings.getSessionKey(this).isEmpty()) {
             UnauthorizedFragment()
         } else {
             AuthorizedFragment()

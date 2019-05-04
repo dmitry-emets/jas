@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Build
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT
-import android.support.v4.app.NotificationCompat.PRIORITY_LOW
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.PRIORITY_DEFAULT
+import androidx.core.app.NotificationCompat.PRIORITY_LOW
 import com.demets.jas.AppSettings
 import com.demets.jas.R
 import com.demets.jas.model.Track

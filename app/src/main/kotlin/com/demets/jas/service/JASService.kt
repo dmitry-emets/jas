@@ -3,8 +3,8 @@ package com.demets.jas.service
 import android.app.Service
 import android.content.Intent
 import android.os.IBinder
-import android.support.v4.content.LocalBroadcastManager
 import android.widget.Toast
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.demets.jas.AppSettings
 import com.demets.jas.R
 import com.demets.jas.api.LfApiService

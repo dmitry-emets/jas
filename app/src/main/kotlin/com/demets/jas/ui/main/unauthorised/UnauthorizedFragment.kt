@@ -7,10 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.arellomobile.mvp.MvpAppCompatFragment
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.AppSettings
 import com.demets.jas.R
+import com.demets.jas.androidx.moxy.MvpAppCompatFragment
 import com.demets.jas.ui.authorization.AuthActivity
 import com.demets.jas.ui.main.authorised.AuthorizedFragment
 import com.demets.jas.utils.NotificationUtil
@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_unauthorized.loadingPanel
  */
 class UnauthorizedFragment : MvpAppCompatFragment(), IUnauthorizedView {
 
-    var disposable: Disposable? = null
+    private var disposable: Disposable? = null
 
     @InjectPresenter
     lateinit var presenter: UnauthorisedPresenter

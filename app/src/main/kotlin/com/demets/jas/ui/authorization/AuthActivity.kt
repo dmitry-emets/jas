@@ -7,9 +7,9 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.webkit.*
-import com.arellomobile.mvp.MvpAppCompatActivity
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.R
+import com.demets.jas.androidx.moxy.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.activity_authorize.loadingPanel
 import kotlinx.android.synthetic.main.activity_authorize.webView
 

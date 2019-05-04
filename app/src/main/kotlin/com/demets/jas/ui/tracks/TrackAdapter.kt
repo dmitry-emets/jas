@@ -1,11 +1,11 @@
 package com.demets.jas.ui.tracks
 
 import android.database.Cursor
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.demets.jas.R
 import com.demets.jas.db.contract.TrackContract
 import com.demets.jas.ui.tracks.TrackAdapter.TrackViewHolder

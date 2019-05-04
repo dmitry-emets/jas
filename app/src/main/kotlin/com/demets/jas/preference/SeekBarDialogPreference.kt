@@ -3,8 +3,8 @@ package com.demets.jas.preference
 import android.content.Context
 import android.content.res.Resources
 import android.content.res.TypedArray
-import android.support.v7.preference.DialogPreference
 import android.util.AttributeSet
+import androidx.preference.DialogPreference
 import com.demets.jas.R
 
 /**

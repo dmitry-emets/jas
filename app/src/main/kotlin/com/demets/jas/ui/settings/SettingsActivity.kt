@@ -1,8 +1,8 @@
 package com.demets.jas.ui.settings
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.demets.jas.R
 
 /**

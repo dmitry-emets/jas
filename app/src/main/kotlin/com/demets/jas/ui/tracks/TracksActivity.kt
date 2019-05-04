@@ -3,13 +3,13 @@ package com.demets.jas.ui.tracks
 import android.content.*
 import android.database.Cursor
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
-import com.arellomobile.mvp.MvpAppCompatActivity
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.R
+import com.demets.jas.androidx.moxy.MvpAppCompatActivity
 import kotlinx.android.synthetic.main.track_list.rv_tracks
 
 /**
