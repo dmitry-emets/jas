@@ -4,34 +4,46 @@ import android.content.*
 import android.database.Cursor
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.R
 import com.demets.jas.androidx.moxy.MvpAppCompatActivity
-import kotlinx.android.synthetic.main.track_list.rv_tracks
+import kotlinx.android.synthetic.main.track_list.noTracksPlaceholder
+import kotlinx.android.synthetic.main.track_list.rvTracks
 
 /**
  * Created by dmitr on 19.02.2018.
  */
-class TracksActivity : MvpAppCompatActivity(), TracksView {
+class TracksActivity : MvpAppCompatActivity(), ITracksView {
     @InjectPresenter
-    lateinit var mTracksPresenter: TracksPresenter
-    private val mRecyclerView: RecyclerView by lazy { rv_tracks }
+    lateinit var presenter: TracksPresenter
+    private val mRecyclerView: RecyclerView by lazy { rvTracks }
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var receiver: BroadcastReceiver
 
     override fun updateView(cursor: Cursor) {
         mRecyclerView.adapter = TrackAdapter(cursor)
         (mRecyclerView.adapter as TrackAdapter).notifyDataSetChanged()
-        //hide or show no tracks message
+        changeScreen(cursor.count > 0)
+    }
+
+    private fun changeScreen(hasTracks: Boolean) {
+        if (hasTracks) {
+            noTracksPlaceholder.visibility = View.GONE
+            rvTracks.visibility = View.VISIBLE
+        } else {
+            rvTracks.visibility = View.GONE
+            noTracksPlaceholder.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.track_list)
-        mTracksPresenter.init(applicationContext)
+        presenter.init(applicationContext)
 
         mRecyclerView.setHasFixedSize(true)
         mLayoutManager = LinearLayoutManager(this)
@@ -40,7 +52,7 @@ class TracksActivity : MvpAppCompatActivity(), TracksView {
         receiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 intent?.let {
-                    mTracksPresenter.processIntent(intent)
+                    presenter.processIntent(intent)
                 }
             }
         }

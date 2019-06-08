@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers
 import java.sql.Timestamp
 
 @InjectViewState
-class TracksPresenter : MvpPresenter<TracksView>() {
+class TracksPresenter : MvpPresenter<ITracksView>() {
     private lateinit var context: Context
     private lateinit var mDb: SQLiteDatabase
     private val lfApiService = LfApiService.create()

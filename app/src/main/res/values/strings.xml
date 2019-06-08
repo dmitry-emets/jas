@@ -101,4 +101,7 @@
     <!--Notifications and toasts-->
     <string name="notif_now_playing_label">Now scrobbling</string>
     <string name="toast_scrobbled">Scrobbled: %s - %s</string>
+    <!--Tracks activity-->
+    <string name="no_scrobbled_tracks_title">No scrobbled tracks</string>
+    <string name="no_scrobbled_tracks_description">Try to listen some music. All scrobbled tracks will appear here.</string>
 </resources>

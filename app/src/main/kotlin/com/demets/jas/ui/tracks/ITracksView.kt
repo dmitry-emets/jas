@@ -6,6 +6,6 @@ import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
-interface TracksView : MvpView {
+interface ITracksView : MvpView {
     fun updateView(cursor: Cursor)
 }

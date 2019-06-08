@@ -78,4 +78,7 @@
     <!--Notifications and toasts-->
     <string name="notif_now_playing_label">Сейчас скробблится</string>
     <string name="toast_scrobbled">Заскробблено: %s - %s</string>
+    <!--Tracks activity-->
+    <string name="no_scrobbled_tracks_title">Нет заскроббленных треков</string>
+    <string name="no_scrobbled_tracks_description">Послушайте немного музыки. Все заскроббленные треки появятся здесь.</string>
 </resources>
