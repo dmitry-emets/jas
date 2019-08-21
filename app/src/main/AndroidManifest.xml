@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.demets.jas">
 
-    <uses-permission android:name="android.permission.INTERNET" />
     <application
+        android:name="com.demets.jas.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -34,9 +34,6 @@
         </activity>
         <activity android:name=".ui.authorization.AuthActivity" />
 
-        <service
-            android:name=".service.JASService"
-            android:exported="false" />
         <receiver
             android:name=".receivers.MyBroadcastReceiver"
             android:enabled="true"
@@ -47,7 +44,11 @@
                 <action android:name="com.android.music.playbackcomplete" />
             </intent-filter>
         </receiver>
+        <service
+            android:name=".service.JASService"
+            android:exported="false" />
 
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

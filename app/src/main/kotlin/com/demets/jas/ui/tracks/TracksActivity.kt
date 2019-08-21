@@ -1,7 +1,6 @@
 package com.demets.jas.ui.tracks
 
 import android.content.*
-import android.database.Cursor
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.R
 import com.demets.jas.androidx.moxy.MvpAppCompatActivity
+import com.demets.jas.db.room.TrackEntity
 import kotlinx.android.synthetic.main.track_list.noTracksPlaceholder
 import kotlinx.android.synthetic.main.track_list.rvTracks
 
@@ -24,10 +24,10 @@ class TracksActivity : MvpAppCompatActivity(), ITracksView {
     private lateinit var mLayoutManager: RecyclerView.LayoutManager
     private lateinit var receiver: BroadcastReceiver
 
-    override fun updateView(cursor: Cursor) {
-        mRecyclerView.adapter = TrackAdapter(cursor)
+    override fun updateView(tracks: List<TrackEntity>) {
+        mRecyclerView.adapter = TrackAdapter(tracks)
         (mRecyclerView.adapter as TrackAdapter).notifyDataSetChanged()
-        changeScreen(cursor.count > 0)
+        changeScreen(tracks.isNotEmpty())
     }
 
     private fun changeScreen(hasTracks: Boolean) {

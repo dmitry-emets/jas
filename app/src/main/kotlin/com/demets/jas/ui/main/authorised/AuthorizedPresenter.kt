@@ -9,8 +9,7 @@ import com.arellomobile.mvp.MvpPresenter
 import com.demets.jas.AppSettings
 import com.demets.jas.R
 import com.demets.jas.api.LfApiService
-import com.demets.jas.db.TrackDbHelper
-import com.demets.jas.db.contract.TrackContract
+import com.demets.jas.db.TracksRepository
 import com.demets.jas.utils.TaggedLogger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,7 +30,12 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
         val tooOldData = System.currentTimeMillis() - lastUpdateTime > 1000 * 60 * 10
 
         if (!neverUpdated) {
-            viewState.updateLastFmCountSuccess(Pair(lastCount.toString(), formatTime(lastUpdateTime, context)))
+            viewState.updateLastFmCountSuccess(
+                Pair(
+                    lastCount.toString(),
+                    formatTime(lastUpdateTime, context)
+                )
+            )
         }
         if (neverUpdated || tooOldData) {
             fetchScrobbleCount(context)
@@ -70,21 +74,17 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
     }
 
     fun countTodayScrobbled(context: Context) {
-        val trackDbHelper = TrackDbHelper(context)
-        val cursor = trackDbHelper.writableDatabase
-                .query(
-                        TrackContract.TrackEntry.TABLE_NAME,
-                        null,
-                        "${TrackContract.TrackEntry.COLUMN_TIME}>=date('now', 'localtime', 'start of day')",
-                        null,
-                        null,
-                        null,
-                        null
+        //TODO: вынести работу с базой в отдельный слой, обернуть в  Single
+        TracksRepository(context)
+            .getScrobbledToday()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { trackDaos ->
+                val pair = Pair(
+                    trackDaos.count().toString(),
+                    formatTime(System.currentTimeMillis(), context)
                 )
-        val pair = Pair(cursor.count.toString(), formatTime(System.currentTimeMillis(), context))
-        cursor.close()
-        trackDbHelper.close()
-        viewState.updateTodayScrobbled(pair)
+                viewState.updateTodayScrobbled(pair)
+            }
     }
 
     fun initNowPlaying(context: Context) {
@@ -104,19 +104,23 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
     private fun setLoveFabInServerState(track: String, artist: String, context: Context) {
         TaggedLogger.d("$canLove, $cachedLoved")
         if (!cachedLoved) {
-            lfApiService.getTrackInfo(track = track, artist = artist, user = AppSettings.getUsername(context))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .map { it.result.userloved }
-                    .subscribe({
-                        cachedLoved = true
-                        canLove = it != 1
-                        TaggedLogger.d("Can love: $canLove")
-                        viewState.toggleLikeFab(canLove)
-                    }, {
-                        canLove = true
-                        viewState.toggleLikeFab(canLove)
-                    })
+            lfApiService.getTrackInfo(
+                track = track,
+                artist = artist,
+                user = AppSettings.getUsername(context)
+            )
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map { it.result.userloved }
+                .subscribe({
+                               cachedLoved = true
+                               canLove = it != 1
+                               TaggedLogger.d("Can love: $canLove")
+                               viewState.toggleLikeFab(canLove)
+                           }, {
+                               canLove = true
+                               viewState.toggleLikeFab(canLove)
+                           })
         } else {
             viewState.toggleLikeFab(canLove)
         }
@@ -129,26 +133,42 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
         if (track != null && artist != null) {
             if (canLove) {
                 lfApiService.trackLove(track, artist, sk)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Toast.makeText(context, context.getString(R.string.ma_track_loved_message), Toast.LENGTH_SHORT).show()
-                            canLove = false
-                            viewState.toggleLikeFab(canLove)
-                        }, {
-                            Toast.makeText(context, context.getString(R.string.ma_track_love_failed_message), Toast.LENGTH_SHORT).show()
-                        })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                                   Toast.makeText(
+                                       context,
+                                       context.getString(R.string.ma_track_loved_message),
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                                   canLove = false
+                                   viewState.toggleLikeFab(canLove)
+                               }, {
+                                   Toast.makeText(
+                                       context,
+                                       context.getString(R.string.ma_track_love_failed_message),
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                               })
             } else {
                 lfApiService.trackUnlove(track, artist, sk)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({
-                            Toast.makeText(context, context.getString(R.string.ma_track_unloved_message), Toast.LENGTH_SHORT).show()
-                            canLove = true
-                            viewState.toggleLikeFab(canLove)
-                        }, {
-                            Toast.makeText(context, context.getString(R.string.ma_track_unlove_failed_message), Toast.LENGTH_SHORT).show()
-                        })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                                   Toast.makeText(
+                                       context,
+                                       context.getString(R.string.ma_track_unloved_message),
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                                   canLove = true
+                                   viewState.toggleLikeFab(canLove)
+                               }, {
+                                   Toast.makeText(
+                                       context,
+                                       context.getString(R.string.ma_track_unlove_failed_message),
+                                       Toast.LENGTH_SHORT
+                                   ).show()
+                               })
             }
         }
 
@@ -160,21 +180,31 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
         val user = AppSettings.getUsername(context)
         viewState.showRefresher()
         lfApiService.getUserInfo(user)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map { it.result.playcount }
-                .subscribe({
-                    val time = System.currentTimeMillis()
-                    AppSettings.setLastFmCount(context, it)
-                    AppSettings.setLastFmCountTime(context, time)
-                    viewState.hideRefresher()
-                    viewState.updateLastFmCountSuccess(Pair(it.toString(), formatTime(time, context)))
-                }, {
-                    val count = AppSettings.getLastFmCount(context)
-                    val time = AppSettings.getLastFmCountTime(context)
-                    viewState.hideRefresher()
-                    viewState.updateLastFmCountFailed(Pair(count.toString(), formatTime(time, context)))
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .map { it.result.playcount }
+            .subscribe({
+                           val time = System.currentTimeMillis()
+                           AppSettings.setLastFmCount(context, it)
+                           AppSettings.setLastFmCountTime(context, time)
+                           viewState.hideRefresher()
+                           viewState.updateLastFmCountSuccess(
+                               Pair(
+                                   it.toString(),
+                                   formatTime(time, context)
+                               )
+                           )
+                       }, {
+                           val count = AppSettings.getLastFmCount(context)
+                           val time = AppSettings.getLastFmCountTime(context)
+                           viewState.hideRefresher()
+                           viewState.updateLastFmCountFailed(
+                               Pair(
+                                   count.toString(),
+                                   formatTime(time, context)
+                               )
+                           )
+                       })
     }
 
     private fun formatTime(time: Long, context: Context): String {
@@ -191,7 +221,11 @@ class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {
         return if (DateUtils.isToday(time)) {
             String.format(context.getString(R.string.ma_update_time_today), dfTime.format(date))
         } else {
-            String.format(context.getString(R.string.ma_update_time_not_today), dfDate.format(date), dfTime.format(date))
+            String.format(
+                context.getString(R.string.ma_update_time_not_today),
+                dfDate.format(date),
+                dfTime.format(date)
+            )
         }
     }
 

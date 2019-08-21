@@ -1,13 +1,12 @@
 package com.demets.jas.ui.tracks
 
-import android.database.Cursor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.demets.jas.R
-import com.demets.jas.db.contract.TrackContract
+import com.demets.jas.db.room.TrackEntity
 import com.demets.jas.ui.tracks.TrackAdapter.TrackViewHolder
 import kotlinx.android.synthetic.main.track_list_item.view.tv_artist_item
 import kotlinx.android.synthetic.main.track_list_item.view.tv_scrobbled_item
@@ -16,7 +15,7 @@ import kotlinx.android.synthetic.main.track_list_item.view.tv_track_item
 /**
  * Created by dmitr on 20.02.2018.
  */
-class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(private var tracks: List<TrackEntity>) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val context = parent.context
@@ -25,17 +24,10 @@ class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackView
         return TrackViewHolder(view)
     }
 
-    override fun getItemCount(): Int = mCursor.count
+    override fun getItemCount(): Int = tracks.size
 
     override fun onBindViewHolder(viewHolder: TrackViewHolder, position: Int) {
-        if (!mCursor.moveToPosition(position)) return
-        val trackColumnIndex = mCursor.getColumnIndex(TrackContract.TrackEntry.COLUMN_TRACK)
-        val track = mCursor.getString(trackColumnIndex)
-        val artistColumnIndex = mCursor.getColumnIndex(TrackContract.TrackEntry.COLUMN_ARTIST)
-        val artist = mCursor.getString(artistColumnIndex)
-        val isScrobbledColumnIndex = mCursor.getColumnIndex(TrackContract.TrackEntry.COLUMN_SCROBBLED)
-        val isScrobbled = mCursor.getInt(isScrobbledColumnIndex) == 1
-        viewHolder.bind(track, artist, isScrobbled)
+        viewHolder.bind(tracks[position].title, tracks[position].artist, tracks[position].scrobbled)
     }
 
     class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,11 +38,14 @@ class TrackAdapter(private var mCursor: Cursor) : RecyclerView.Adapter<TrackView
         fun bind(track: String, artist: String, isScrobbled: Boolean) {
             val context = mTrackTextView.context
             mTrackTextView.text = track
-            mArtistTextView.text = String.format(context.getString(R.string.tracks_activity_element_artist), artist)
+            mArtistTextView.text =
+                String.format(context.getString(R.string.tracks_activity_element_artist), artist)
             if (isScrobbled) {
-                mScrobbledTextView.text = context.getString(R.string.tracks_activity_element_scrobbled)
+                mScrobbledTextView.text =
+                    context.getString(R.string.tracks_activity_element_scrobbled)
             } else {
-                mScrobbledTextView.text = context.getString(R.string.tracks_activity_element_not_scrobbled)
+                mScrobbledTextView.text =
+                    context.getString(R.string.tracks_activity_element_not_scrobbled)
             }
         }
     }
