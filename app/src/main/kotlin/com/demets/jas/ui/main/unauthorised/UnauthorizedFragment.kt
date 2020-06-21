@@ -15,8 +15,7 @@ import com.demets.jas.ui.authorization.AuthActivity
 import com.demets.jas.ui.main.authorised.AuthorizedFragment
 import com.demets.jas.utils.NotificationUtil
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.fragment_unauthorized.buttonSignIn
-import kotlinx.android.synthetic.main.fragment_unauthorized.loadingPanel
+import kotlinx.android.synthetic.main.fragment_unauthorized.*
 
 /**
  * Created by dmitr on 06.02.2018.

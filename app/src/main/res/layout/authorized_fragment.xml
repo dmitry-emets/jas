@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"
             android:paddingTop="8dp"
+            android:paddingRight="8dp"
             tools:context="com.demets.jas.ui.main.MainActivity">
 
             <androidx.cardview.widget.CardView
@@ -52,7 +52,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:paddingLeft="8dp"
+                            android:paddingStart="8dp"
                             android:text="@string/ma_total_played_label"
                             android:textSize="17sp" />
 
@@ -62,7 +62,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="bottom"
-                            android:paddingLeft="8dp"
+                            android:paddingStart="8dp"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -77,8 +77,8 @@
                     android:id="@+id/layout_scrobbled_today"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignEnd="@id/layout_total_played"
                     android:layout_alignBottom="@id/layout_total_played"
-                    android:layout_alignRight="@id/layout_total_played"
                     android:layout_margin="8dp"
                     android:orientation="horizontal">
 
@@ -102,7 +102,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="top"
-                            android:paddingLeft="8dp"
+                            android:paddingStart="8dp"
                             android:text="@string/ma_today_played_label"
                             android:textSize="17sp" />
 
@@ -112,7 +112,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="bottom"
-                            android:paddingLeft="8dp"
+                            android:paddingStart="8dp"
                             android:text=""
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -129,8 +129,8 @@
                     android:id="@+id/layout_now_playing"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignEnd="@id/layout_scrobbled_today"
                     android:layout_alignBottom="@id/layout_scrobbled_today"
-                    android:layout_alignRight="@id/layout_scrobbled_today"
                     android:layout_margin="8dp"
                     android:orientation="vertical">
 

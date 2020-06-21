@@ -8,12 +8,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:paddingTop="16dp"
-        tools:context="com.demets.jas.ui.main.MainActivity"
-        android:gravity="center">
+        android:paddingRight="16dp"
+        tools:context="com.demets.jas.ui.main.MainActivity">
 
         <TextView
             android:id="@+id/tvHello"
@@ -35,19 +35,21 @@
 
         <Button
             android:id="@+id/buttonSignIn"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             android:padding="16dp"
-            android:text="@string/log_in_button_text"
-            style="@style/Widget.AppCompat.Button.Borderless.Colored" />
+            android:text="@string/log_in_button_text" />
 
     </LinearLayout>
-    <RelativeLayout
+
+    <LinearLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/smokeWhite"
         android:gravity="center"
         android:visibility="gone"
         tools:visibility="visible">
@@ -56,5 +58,5 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:indeterminate="true" />
-    </RelativeLayout>
+    </LinearLayout>
 </FrameLayout>

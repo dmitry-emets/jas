@@ -1,81 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.preference.PreferenceCategory android:title="@string/pref_section_scrobbling">
+    <androidx.preference.PreferenceCategory
+        android:paddingStart="0dp"
+        android:title="@string/pref_section_scrobbling">
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="@string/pref_key_scrobbling_enabled"
-            android:title="@string/pref_title_scrobbling_enabled"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:title="@string/pref_title_scrobbling_enabled" />
+
         <com.demets.jas.preference.SeekBarDialogPreference
             style="@style/DialogPreference"
-            android:key="@string/pref_key_min_time_to_scrobble"
-            android:title="@string/pref_title_min_time_to_scrobble"
-            android:defaultValue="30"
+            max="60"
+            min="1"
             textFormTemplate="@string/pref_min_time_popup_text_template"
-            min="1"
-            max="60" />
-        <com.demets.jas.preference.SeekBarDialogPreference
-            style="@style/DialogPreference"
-            android:key="@string/pref_key_min_percent_to_scrobble"
-            android:title="@string/pref_title_min_percent_to_scrobble"
-            android:defaultValue="50"
-            textFormTemplate="@string/pref_min_percent_popup_text_template"
-            min="50"
-            max="100" />
-        <com.demets.jas.preference.SeekBarDialogPreference
-            style="@style/DialogPreference"
-            android:key="@string/pref_key_min_track_duration_to_scrobble"
-            android:title="@string/pref_title_min_track_duration_to_scrobble"
             android:defaultValue="30"
-            textFormTemplate="@string/pref_min_track_duration_popup_text_template"
+            android:key="@string/pref_key_min_time_to_scrobble"
+            android:title="@string/pref_title_min_time_to_scrobble" />
+
+        <com.demets.jas.preference.SeekBarDialogPreference
+            style="@style/DialogPreference"
+            max="100"
+            min="50"
+            textFormTemplate="@string/pref_min_percent_popup_text_template"
+            android:defaultValue="50"
+            android:key="@string/pref_key_min_percent_to_scrobble"
+            android:title="@string/pref_title_min_percent_to_scrobble" />
+
+        <com.demets.jas.preference.SeekBarDialogPreference
+            style="@style/DialogPreference"
+            max="60"
             min="1"
-            max="60" />
+            textFormTemplate="@string/pref_min_track_duration_popup_text_template"
+            android:defaultValue="30"
+            android:key="@string/pref_key_min_track_duration_to_scrobble"
+            android:title="@string/pref_title_min_track_duration_to_scrobble" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_section_notifications">
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="@string/pref_key_notifications_enabled"
             android:title="@string/pref_title_notifications_enabled" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="@string/pref_key_min_priority_notifications_enabled"
             android:title="@string/pref_title_min_priority_notifications_enabled" />
+
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="@string/pref_key_enable_toast_on_scrobble"
             android:title="@string/pref_title_enable_toast_on_scrobble" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_section_account">
+
         <androidx.preference.Preference
             android:enabled="false"
             android:key="@string/pref_key_logout"
             android:title="@string/pref_title_logout" />
+
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory android:title="@string/pref_section_credits">
+
         <androidx.preference.Preference
             android:enabled="true"
             android:key="@string/pref_key_author"
-            android:title="@string/pref_title_author"
-            android:summary="@string/pref_summary_author" />
+            android:summary="@string/pref_summary_author"
+            android:title="@string/pref_title_author" />
+
         <androidx.preference.Preference
             android:enabled="true"
             android:key="@string/pref_key_logo_author"
-            android:title="@string/pref_title_logo_author"
-            android:summary="@string/pref_summary_logo_author" />
+            android:summary="@string/pref_summary_logo_author"
+            android:title="@string/pref_title_logo_author" />
+
         <androidx.preference.Preference
             android:enabled="true"
             android:key="@string/pref_key_icons_author"
-            android:title="@string/pref_title_icons_author"
-            android:summary="@string/pref_summary_icons_author" />
+            android:summary="@string/pref_summary_icons_author"
+            android:title="@string/pref_title_icons_author" />
+
         <androidx.preference.Preference
             android:enabled="true"
             android:key="@string/pref_key_version"
-            android:title="@string/pref_title_version"
-            android:summary="@string/pref_summary_version" />
+            android:summary="@string/pref_summary_version"
+            android:title="@string/pref_title_version" />
+
     </androidx.preference.PreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

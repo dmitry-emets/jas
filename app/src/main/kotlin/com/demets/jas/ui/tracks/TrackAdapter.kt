@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.demets.jas.R
 import com.demets.jas.db.room.TrackEntity
 import com.demets.jas.ui.tracks.TrackAdapter.TrackViewHolder
-import kotlinx.android.synthetic.main.track_list_item.view.tv_artist_item
-import kotlinx.android.synthetic.main.track_list_item.view.tv_scrobbled_item
-import kotlinx.android.synthetic.main.track_list_item.view.tv_track_item
+import kotlinx.android.synthetic.main.track_list_item.view.*
 
 /**
  * Created by dmitr on 20.02.2018.
  */
-class TrackAdapter(private var tracks: List<TrackEntity>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(
+        private var tracks: List<TrackEntity>
+) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val context = parent.context

@@ -5,15 +5,14 @@ import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.preference.PreferenceDialogFragmentCompat
-import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.seekbar
-import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.textview
+import kotlinx.android.synthetic.main.pref_dialog_seekbar.view.*
 
 /**
  * Created by dmitr on 26.02.2018.
  */
 class SeekBarDialogPreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
-    private lateinit var mSeekBar: SeekBar
-    private lateinit var mTextView: TextView
+    private lateinit var seekBar: SeekBar
+    private lateinit var valueView: TextView
 
     private var mMin: Int = 0
     private var mMax: Int = 100
@@ -22,8 +21,8 @@ class SeekBarDialogPreferenceDialogFragmentCompat : PreferenceDialogFragmentComp
 
     override fun onBindDialogView(view: View) {
         super.onBindDialogView(view)
-        mSeekBar = view.seekbar
-        mTextView = view.textview
+        seekBar = view.seekbar
+        valueView = view.valueView
         if (preference is SeekBarDialogPreference) {
             mValue = (preference as SeekBarDialogPreference).mValue
             mMin = (preference as SeekBarDialogPreference).minValue
@@ -37,12 +36,12 @@ class SeekBarDialogPreferenceDialogFragmentCompat : PreferenceDialogFragmentComp
             if (mValue > mMax) {
                 mValue = mMax
             }
-            mSeekBar.max = mMax - mMin
-            mSeekBar.progress = mValue - mMin
-            mTextView.text = String.format(mTemplate, mValue)
-            mSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            seekBar.max = mMax - mMin
+            seekBar.progress = mValue - mMin
+            valueView.text = String.format(mTemplate, mValue)
+            seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                    mTextView.text = String.format(mTemplate, progress + mMin)
+                    valueView.text = String.format(mTemplate, progress + mMin)
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -58,8 +57,8 @@ class SeekBarDialogPreferenceDialogFragmentCompat : PreferenceDialogFragmentComp
         if (positiveResult) {
             if (preference is SeekBarDialogPreference) {
                 val seekBarDialogPreference = preference as SeekBarDialogPreference
-                if (seekBarDialogPreference.callChangeListener(mSeekBar.progress + mMin)) {
-                    seekBarDialogPreference.mValue = mSeekBar.progress + mMin
+                if (seekBarDialogPreference.callChangeListener(seekBar.progress + mMin)) {
+                    seekBarDialogPreference.mValue = seekBar.progress + mMin
                 }
             }
         }

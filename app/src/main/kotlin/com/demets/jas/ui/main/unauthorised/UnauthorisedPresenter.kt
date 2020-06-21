@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 @InjectViewState
 class UnauthorisedPresenter : MvpPresenter<IUnauthorizedView>() {
     private val lfApiService = LfApiService.create()
+
     var accessRequested = false
 
     fun showLoader() = viewState.showLoader()

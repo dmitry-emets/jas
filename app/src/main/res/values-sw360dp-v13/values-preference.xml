@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <bool name="config_materialPreferenceIconSpaceReserved" tools:ignore="MissingDefaultResource,PrivateResource">false</bool>
+<!--    TODO: Удалить после апдейта до preference выше 1.1.0-alpha01-->
+<!--    See: https://stackoverflow.com/questions/51518758/preferencefragmentcompat-has-padding-on-preferencecategory-that-i-cant-get-rid-->
+    <dimen name="preference_category_padding_start" tools:ignore="MissingDefaultResource,PrivateResource">0dp</dimen>
+</resources>
