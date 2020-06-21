@@ -6,7 +6,6 @@ import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 @StateStrategyType(AddToEndSingleStrategy::class)
 interface IAuthorizedView : MvpView {
-    fun askLastFmCount()
     fun updateLastFmCountSuccess(pair: Pair<String, String>)
     fun updateLastFmCountFailed(pair: Pair<String, String>)
 

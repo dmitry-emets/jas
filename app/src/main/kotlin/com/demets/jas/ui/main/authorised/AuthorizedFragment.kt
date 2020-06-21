@@ -1,6 +1,9 @@
 package com.demets.jas.ui.main.authorised
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +26,12 @@ import kotlinx.android.synthetic.main.authorized_fragment.*
  * Created by dmitr on 06.02.2018.
  */
 class AuthorizedFragment : MvpAppCompatFragment(), IAuthorizedView {
+
+    private lateinit var receiver: BroadcastReceiver
+
+    @InjectPresenter
+    lateinit var mAuthorizedPresenter: AuthorizedPresenter
+
     override fun onResume() {
         super.onResume()
         if (AppSettings.getSessionKey(activity).isEmpty()) {
@@ -42,21 +51,11 @@ class AuthorizedFragment : MvpAppCompatFragment(), IAuthorizedView {
 
     override fun toggleLikeFab(like: Boolean) {
         val drawable = if (like) {
-            ContextCompat.getDrawable(context!!, R.drawable.love)
+            ContextCompat.getDrawable(requireContext(), R.drawable.love)
         } else {
-            ContextCompat.getDrawable(context!!, R.drawable.unlove)
+            ContextCompat.getDrawable(requireContext(), R.drawable.unlove)
         }
         fab.setImageDrawable(drawable)
-    }
-
-    private lateinit var receiver: BroadcastReceiver
-
-    @InjectPresenter
-    lateinit var mAuthorizedPresenter: AuthorizedPresenter
-
-
-    override fun askLastFmCount() {
-        mAuthorizedPresenter.getScrobbles(context!!)
     }
 
     override fun updateLastFmCountSuccess(pair: Pair<String, String>) {
@@ -119,10 +118,10 @@ class AuthorizedFragment : MvpAppCompatFragment(), IAuthorizedView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fab.visibility = View.GONE
-        fab.setOnClickListener { mAuthorizedPresenter.likePressed(context!!) }
+        fab.setOnClickListener { mAuthorizedPresenter.likePressed(requireContext()) }
         refreshLayout.setOnRefreshListener { mAuthorizedPresenter.fetchScrobbleCount(context!!) }
-        mAuthorizedPresenter.getScrobbles(context!!)
-        mAuthorizedPresenter.initNowPlaying(context!!)
-        mAuthorizedPresenter.countTodayScrobbled(context!!)
+        mAuthorizedPresenter.getScrobbles(requireContext())
+        mAuthorizedPresenter.initNowPlaying(requireContext())
+        mAuthorizedPresenter.countTodayScrobbled(requireContext())
     }
 }
