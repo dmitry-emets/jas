@@ -20,20 +20,23 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         PreferenceManager.setDefaultValues(
-            this,
-            AppSettings.PREFS_NAME,
-            Context.MODE_PRIVATE,
-            R.xml.preferences,
-            false
+                this,
+                AppSettings.PREFS_NAME,
+                Context.MODE_PRIVATE,
+                R.xml.preferences,
+                false
         )
-        val fragment: MvpAppCompatFragment = if (AppSettings.getSessionKey(this).isEmpty()) {
-            UnauthorizedFragment()
-        } else {
+
+        val hasSessionKey = AppSettings.getSessionKey(this).isNotEmpty()
+        val fragment: MvpAppCompatFragment = if (hasSessionKey) {
             AuthorizedFragment()
+        } else {
+            UnauthorizedFragment()
         }
-        supportFragmentManager.beginTransaction()
-            .replace(android.R.id.content, fragment)
-            .commit()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(android.R.id.content, fragment)
+                .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -41,8 +44,8 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.menu_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
