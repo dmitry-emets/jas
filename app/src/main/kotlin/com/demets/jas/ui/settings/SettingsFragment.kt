@@ -28,7 +28,7 @@ class SettingsFragment : PreferenceFragmentCompat(),
         if (preference is SeekBarDialogPreference) {
             val dialogFragment = SeekBarDialogPreferenceDialogFragmentCompat.newInstance(preference.key)
             dialogFragment.setTargetFragment(this, 0)
-            dialogFragment.show(this.fragmentManager, "androidx.preference.PreferenceFragment.DIALOG")
+            dialogFragment.show(fragmentManager!!, "androidx.preference.PreferenceFragment.DIALOG")
         } else {
             super.onDisplayPreferenceDialog(preference)
         }

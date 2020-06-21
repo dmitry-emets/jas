@@ -13,7 +13,10 @@ import com.demets.jas.utils.TaggedLogger
  * Created by DEmets on 08.02.2018.
  */
 class MyBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(
+            context: Context?,
+            intent: Intent?
+    ) {
         val sb = StringBuilder()
         sb.append("Action: " + intent?.action + "\n")
         sb.append("URI: " + intent?.toUri(Intent.URI_INTENT_SCHEME).toString() + "\n")
@@ -29,18 +32,24 @@ class MyBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
-    private fun processIntent(context: Context?, intent: Intent): Intent? {
+    private fun processIntent(
+            context: Context?,
+            intent: Intent
+    ): Intent? {
         val intentToSend = Intent(context, JASService::class.java)
         val rawDuration = IntentUtil.getLong(intent, listOf("duration"))
         val isPlaying = IntentUtil.getBoolean(intent, listOf("playing"), null) ?: return null
+
         intentToSend.apply {
             putExtra(EXTRA_IS_PLAYING, isPlaying)
-            putExtra(EXTRA_PLAYER, intent.action.substring(0, intent.action.lastIndexOf(".")))
             putExtra(EXTRA_TRACK_ID, IntentUtil.getLong(intent, listOf("id")))
             putExtra(EXTRA_TRACK, intent.getStringExtra("track") ?: return null)
             putExtra(EXTRA_ARTIST, intent.getStringExtra("artist") ?: return null)
             putExtra(EXTRA_ALBUM, intent.getStringExtra("album"))
             putExtra(EXTRA_DURATION, if (rawDuration < 30000) rawDuration * 1000 else rawDuration)
+            intent.action?.let {
+                putExtra(EXTRA_PLAYER, it.substring(0, it.lastIndexOf(".")))
+            }
         }
         return intentToSend
     }
@@ -59,11 +68,13 @@ class MyBroadcastReceiver : BroadcastReceiver() {
             return if (intent == null) {
                 null
             } else {
-                Track(intent.getStringExtra(EXTRA_TRACK),
-                        intent.getStringExtra(EXTRA_ARTIST),
-                        intent.getStringExtra(EXTRA_ALBUM),
+                Track(
+                        intent.getStringExtra(EXTRA_TRACK).orEmpty(),
+                        intent.getStringExtra(EXTRA_ARTIST).orEmpty(),
+                        intent.getStringExtra(EXTRA_ALBUM).orEmpty(),
                         intent.getLongExtra(EXTRA_DURATION, -1L),
-                        intent.getLongExtra(EXTRA_TIMESTAMP, -1L))
+                        intent.getLongExtra(EXTRA_TIMESTAMP, -1L)
+                )
             }
         }
     }
