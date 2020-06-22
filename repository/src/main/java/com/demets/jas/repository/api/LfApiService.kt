@@ -1,13 +1,16 @@
-package com.demets.jas.api
+package com.demets.jas.repository.api
 
-import com.demets.jas.api.model.*
+import com.demets.jas.repository.api.model.*
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import java.math.BigInteger
 import java.security.MessageDigest
 

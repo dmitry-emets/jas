@@ -1,13 +1,12 @@
-package com.demets.jas.api.model
+package com.demets.jas.repository.api.model
 
 import com.google.gson.annotations.SerializedName
 
 /**
  * Created by dmitry on 26/11/2017.
  */
-data class Time(
+data class Image(
         @SerializedName("#text")
         val text: String,
-        @SerializedName("unixtime")
-        val unixTime: String
+        val size: String
 )

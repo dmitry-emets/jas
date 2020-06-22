@@ -8,13 +8,13 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.demets.jas.AppSettings
 import com.demets.jas.R
-import com.demets.jas.api.LfApiService
 import com.demets.jas.db.TracksRepository
+import com.demets.jas.repository.api.LfApiService
 import com.demets.jas.utils.TaggedLogger
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.text.DateFormat
-import java.util.Date
+import java.util.*
 
 @InjectViewState
 class AuthorizedPresenter : MvpPresenter<IAuthorizedView>() {

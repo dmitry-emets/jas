@@ -1,4 +1,4 @@
-package com.demets.jas.api.model
+package com.demets.jas.repository.api.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -14,4 +14,5 @@ data class Tag(
 
 data class TagListWrapper(
         @SerializedName("tag")
-        val tags: List<Tag>)
+        val tags: List<Tag>
+)

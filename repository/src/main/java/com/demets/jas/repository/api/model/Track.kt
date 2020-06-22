@@ -1,4 +1,4 @@
-package com.demets.jas.api.model
+package com.demets.jas.repository.api.model
 
 import com.google.gson.annotations.SerializedName
 
@@ -25,4 +25,5 @@ data class Track(
 
 data class TrackListWrapper(
         @SerializedName("track")
-        val tracks: List<Track>)
+        val tracks: List<Track>
+)

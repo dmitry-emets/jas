@@ -7,11 +7,11 @@ import android.widget.Toast
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.demets.jas.AppSettings
 import com.demets.jas.R
-import com.demets.jas.api.LfApiService
 import com.demets.jas.db.TracksRepository
 import com.demets.jas.model.PreviousTrackInfo
 import com.demets.jas.model.Track
 import com.demets.jas.receivers.MyBroadcastReceiver
+import com.demets.jas.repository.api.LfApiService
 import com.demets.jas.ui.main.authorised.AuthorizedPresenter
 import com.demets.jas.utils.NotificationUtil
 import com.demets.jas.utils.TaggedLogger

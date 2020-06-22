@@ -1,4 +1,4 @@
-package com.demets.jas.api.model
+package com.demets.jas.repository.api.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.demets.jas.api.model
+package com.demets.jas.repository.api.model
 
 /**
  * Created by dmitry on 17/12/2017.
