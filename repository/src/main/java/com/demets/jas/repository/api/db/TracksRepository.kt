@@ -1,9 +1,9 @@
-package com.demets.jas.db
+package com.demets.jas.repository.api.db
 
 import android.content.Context
-import com.demets.jas.db.room.AppDatabase
-import com.demets.jas.db.room.TrackDao
-import com.demets.jas.db.room.TrackEntity
+import com.demets.jas.repository.api.db.room.AppDatabase
+import com.demets.jas.repository.api.db.room.TrackDao
+import com.demets.jas.repository.api.db.room.TrackEntity
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 

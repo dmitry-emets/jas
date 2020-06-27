@@ -1,4 +1,4 @@
-package com.demets.jas.db.room
+package com.demets.jas.repository.api.db.room
 
 import androidx.room.*
 

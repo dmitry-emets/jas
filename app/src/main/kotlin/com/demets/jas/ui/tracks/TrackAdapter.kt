@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.demets.jas.R
-import com.demets.jas.db.room.TrackEntity
+import com.demets.jas.repository.api.db.room.TrackEntity
 import com.demets.jas.ui.tracks.TrackAdapter.TrackViewHolder
 import kotlinx.android.synthetic.main.track_list_item.view.*
 

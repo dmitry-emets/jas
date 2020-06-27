@@ -1,6 +1,9 @@
 package com.demets.jas.ui.tracks
 
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -10,9 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.demets.jas.R
 import com.demets.jas.androidx.moxy.MvpAppCompatActivity
-import com.demets.jas.db.room.TrackEntity
-import kotlinx.android.synthetic.main.track_list.noTracksPlaceholder
-import kotlinx.android.synthetic.main.track_list.rvTracks
+import com.demets.jas.repository.api.db.room.TrackEntity
+import kotlinx.android.synthetic.main.track_list.*
 
 /**
  * Created by dmitr on 19.02.2018.

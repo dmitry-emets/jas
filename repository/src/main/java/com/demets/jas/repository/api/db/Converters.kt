@@ -1,4 +1,4 @@
-package com.demets.jas.db
+package com.demets.jas.repository.api.db
 
 import androidx.room.TypeConverter
 import org.threeten.bp.LocalDateTime
